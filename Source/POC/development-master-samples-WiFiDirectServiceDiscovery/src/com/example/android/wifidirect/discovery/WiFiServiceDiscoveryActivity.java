@@ -123,6 +123,8 @@ public class WiFiServiceDiscoveryActivity extends Activity implements
                     Log.d(TAG, "Disconnect failed. Reason :" + reasonCode);
                 }
 
+                
+                
                 @Override
                 public void onSuccess() {
                 }
