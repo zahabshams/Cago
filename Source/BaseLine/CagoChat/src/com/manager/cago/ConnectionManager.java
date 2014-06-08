@@ -8,7 +8,8 @@ package com.manager.cago;
  *
  */
 public class ConnectionManager {
-
+	
+	static ConnectionManager mCManager;
 	/**
 	 * 
 	 */
@@ -19,15 +20,17 @@ public class ConnectionManager {
 	/**
 	 * @return ConnectionManager
 	 */
-	public static  ConnectionManager getConnectionManager(){
-		ConnectionManager cManager = new ConnectionManager();
-		return cManager;
-		
+	public static ConnectionManager getConnectionManager() {
+		if (mCManager != null) {
+			mCManager = new ConnectionManager();
+		}
+		return mCManager;
+
 	}
 	/**
 	 * 
 	 */
-	public void startConnection(){
+	public void cMStartConnection(){
 		
 	}
 }
