@@ -8,11 +8,9 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.NetworkInfo;
-import android.net.wifi.p2p.WifiP2pDevice;
+import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
-import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener;
 import android.util.Log;
 
 /**
@@ -24,6 +22,7 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 	private Channel channel;
 	private Activity activity;
 	private WDCHPeerlistener mPeerListener;
+	public final IntentFilter intentFilter = new IntentFilter();
 	protected static final String TAG = WiFiDirectBroadcastReceiver.class
 			.getSimpleName();
 
@@ -38,10 +37,17 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 	public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
 			Activity activity, WDCHPeerlistener peerlistener) {
 		super();
+		Log.d(TAG,"creating WiFiDirectBroadcastReceiver");
 		this.manager = manager;
 		this.channel = channel;
 		this.activity = activity;
 		this.mPeerListener = peerlistener;
+		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+		intentFilter
+				.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+		intentFilter
+				.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 	}
 
 	/*
@@ -53,13 +59,15 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		Log.d(TAG, action);
+		Log.d(TAG,"onReceive" + action);
 		
 		if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
 
 		} else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
 				.equals(action)) {
+			Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
+
 			manager.requestPeers(channel, mPeerListener);
 			
 		} else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
