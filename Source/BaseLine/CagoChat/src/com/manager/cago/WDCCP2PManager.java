@@ -14,6 +14,7 @@ import com.viewer.cagochat.WiFiDirectBroadcastReceiver;
  * @author zahab
  * Single class to handle discovery, connection and data to UI layer. 
  * This class will act as a bridge UI and P2P operations related registration discover,connection
+ * 
  */
 
 public class WDCCP2PManager {
