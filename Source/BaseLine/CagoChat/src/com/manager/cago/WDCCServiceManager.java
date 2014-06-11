@@ -18,7 +18,7 @@ import android.util.Log;
 
 /**
  * @author zahab
- * 
+ * For registering DNS service and listening to the available service same signature
  */
 public class WDCCServiceManager {
 
@@ -30,15 +30,17 @@ public class WDCCServiceManager {
 	public static final String TXTRECORD_PROP_AVAILABLE = "available";
 	public static final String SERVICE_INSTANCE = "_wifidemotest";
 	public static final String SERVICE_REG_TYPE = "_presence._tcp";
-	private WifiP2pManager mManager;
+	private WifiP2pManager mAndroidP2Pmanager;
+	WDCCP2PManager mManager;
 	static final int SERVER_PORT = 4545;
 	private Channel mChannel;
 	private WifiP2pDnsSdServiceRequest serviceRequest;
 
-	public WDCCServiceManager(Channel channel, WifiP2pManager manager) {
+	public WDCCServiceManager(Channel channel, WifiP2pManager androidP2PManager, WDCCP2PManager manager) {
 		
-		mManager = manager;
+		mAndroidP2Pmanager = androidP2PManager;
 		mChannel = channel;
+		mManager = manager;
 		startRegistrationAndDiscovery();
 		// TODO Auto-generated constructor stub
 	}
@@ -52,7 +54,7 @@ public class WDCCServiceManager {
 				SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
 		Log.d(TAG,"adding LocalService");
 
-		mManager.addLocalService(mChannel, service, new ActionListener() {
+		mAndroidP2Pmanager.addLocalService(mChannel, service, new ActionListener() {
 
 			@Override
 			public void onSuccess() {
@@ -79,7 +81,7 @@ public class WDCCServiceManager {
 		 */
 		Log.d(TAG,"In discoverService ");
 
-		mManager.setDnsSdResponseListeners(mChannel,new DnsSdServiceResponseListener() {
+		mAndroidP2Pmanager.setDnsSdResponseListeners(mChannel,new DnsSdServiceResponseListener() {
 
 					@Override
 					public void onDnsSdServiceAvailable(String instanceName,
@@ -94,6 +96,8 @@ public class WDCCServiceManager {
 							service.serviceRegistrationType = registrationType;
 							Log.d(TAG, "onBonjourServiceAvailable "
 									+ instanceName);
+							
+							
 						}
 					}
 
@@ -117,7 +121,7 @@ public class WDCCServiceManager {
 		// After attaching listeners, create a service request and initiate
 		// discovery.
 		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
-		mManager.addServiceRequest(mChannel, serviceRequest,
+		mAndroidP2Pmanager.addServiceRequest(mChannel, serviceRequest,
 				new ActionListener() {
 
 					@Override
@@ -132,7 +136,7 @@ public class WDCCServiceManager {
 						// appendStatus("Failed adding service discovery request");
 					}
 				});
-		mManager.discoverServices(mChannel, new ActionListener() {
+		mAndroidP2Pmanager.discoverServices(mChannel, new ActionListener() {
 
 			@Override
 			public void onSuccess() {

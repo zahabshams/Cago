@@ -3,16 +3,21 @@
  */
 package com.manager.cago;
 
+import java.util.ArrayList;
+
 import android.content.Context;
+import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.util.Log;
+
+import com.viewer.cagochat.Device_ListActivity;
 import com.viewer.cagochat.WDCHPeerlistener;
 import com.viewer.cagochat.WiFiDirectBroadcastReceiver;
 
 /**
  * @author zahab
- * Single class to handle discovery, connection and data to UI layer. 
+ * Singleton class to handle discovery, connection and data to UI layer. 
  * This class will act as a bridge UI and P2P operations related registration discover,connection
  * 
  */
@@ -27,7 +32,7 @@ public class WDCCP2PManager {
 	private Channel mChannel = null;
 	private WDCCServiceManager mServiceManager = null;
 	protected static final String TAG = WDCCP2PManager.class.getSimpleName();
-
+	private Device_ListActivity mDevListActivity;
 	/**
 	 * @return
 	 * 
@@ -40,9 +45,9 @@ public class WDCCP2PManager {
 		// zahab need to work on third argument of initialize which is null now.
 		mChannel = mAndroidP2Pmanager.initialize(mContext,mContext.getMainLooper(), null);
 		mP2PBroadcastReceiver = new WiFiDirectBroadcastReceiver(mAndroidP2Pmanager, mChannel, null, mWDPeerlistener);
-		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager);
+		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager, this);
 		mServiceManager.startRegistrationAndDiscovery();
-
+		
 	}
 
 	protected WDCCP2PManager(Context context) {
@@ -53,7 +58,6 @@ public class WDCCP2PManager {
 
 	/**
 	 * @param context
-	 *            TODO
 	 * @return WDCCP2PManager
 	 */
 	public synchronized static WDCCP2PManager getWDCCP2PManager(Context context) {
@@ -70,8 +74,6 @@ public class WDCCP2PManager {
 		}
 
 		mManager.mContext = context;
-		// mManager.initialiseClass();
-
 		return mManager;
 
 	}
@@ -91,8 +93,18 @@ public class WDCCP2PManager {
 
 	}
 
-	public void degisterBroadCastReceiver(Context context) {
+	public void deregisterBroadCastReceiver(Context context) {
 		Log.d(TAG, "IN degisterBroadCastReceiver");
 		context.unregisterReceiver(mP2PBroadcastReceiver);
 	}
+	
+	public boolean notifyServicesChanged(ArrayList<WifiP2pDevice> devicelist){
+		return false;	
+	}
+	
+	public boolean notifyDeviceDisconnected(WifiP2pDevice device) {
+		return false;
+	}
+	
+	
 }

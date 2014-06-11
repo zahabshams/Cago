@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="17" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -15,8 +16,10 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- Google Play filtering --> 
-    <uses-feature android:name="android.hardware.wifi.direct" android:required="true"/>
+    <!-- Google Play filtering -->
+    <uses-feature
+        android:name="android.hardware.wifi.direct"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -31,6 +34,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.viewer.cagochat.ListLayout"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="com.viewer.cagochat.Device_ListActivity"
+            android:label="@string/title_activity_device__list" >
         </activity>
     </application>
 
