@@ -17,57 +17,56 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.util.Log;
 
 /**
- * @author zahab
- * For registering DNS service and listening to the available service same signature
+ * @author zahab For registering DNS service and listening to the available
+ *         service same signature
  */
 public class WDCCServiceManager {
 
-	/**
-	 * 
-	 */
+
 	protected static final String TAG = WDCCServiceManager.class
 			.getSimpleName();
 	public static final String TXTRECORD_PROP_AVAILABLE = "available";
 	public static final String SERVICE_INSTANCE = "_wifidemotest";
 	public static final String SERVICE_REG_TYPE = "_presence._tcp";
 	private WifiP2pManager mAndroidP2Pmanager;
-	WDCCP2PManager mManager;
+	private WDCCP2PManager mManager;
 	static final int SERVER_PORT = 4545;
 	private Channel mChannel;
 	private WifiP2pDnsSdServiceRequest serviceRequest;
+    
+	public WDCCServiceManager(Channel channel,
+			WifiP2pManager androidP2PManager, WDCCP2PManager manager) {
 
-	public WDCCServiceManager(Channel channel, WifiP2pManager androidP2PManager, WDCCP2PManager manager) {
-		
 		mAndroidP2Pmanager = androidP2PManager;
 		mChannel = channel;
 		mManager = manager;
 		startRegistrationAndDiscovery();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void startRegistrationAndDiscovery() {
-		Log.d(TAG,"startRegistrationAndDiscovery");
+		Log.d(TAG, "startRegistrationAndDiscovery");
 		Map<String, String> record = new HashMap<String, String>();
 		record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
 		WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
 				SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
-		Log.d(TAG,"adding LocalService");
+		Log.d(TAG, "adding LocalService");
 
-		mAndroidP2Pmanager.addLocalService(mChannel, service, new ActionListener() {
+		mAndroidP2Pmanager.addLocalService(mChannel, service,
+				new ActionListener() {
 
-			@Override
-			public void onSuccess() {
-				Log.d(TAG,"addLocalService onSuccess");
-				// appendStatus("Added Local Service");
-			}
+					@Override
+					public void onSuccess() {
+						Log.d(TAG, "addLocalService onSuccess");
+						// appendStatus("Added Local Service");
+					}
 
-			@Override
-			public void onFailure(int error) {
-				Log.d(TAG,"addLocalService onFailure");
-				// appendStatus("Failed to add a service");
-			}
-		});
+					@Override
+					public void onFailure(int error) {
+						Log.d(TAG, "addLocalService onFailure");
+						// appendStatus("Failed to add a service");
+					}
+				});
 
 		discoverService();
 
@@ -79,9 +78,10 @@ public class WDCCServiceManager {
 		 * Register listeners for DNS-SD services. These are callbacks invoked
 		 * by the system when a service is actually discovered.
 		 */
-		Log.d(TAG,"In discoverService ");
+		Log.d(TAG, "In discoverService ");
 
-		mAndroidP2Pmanager.setDnsSdResponseListeners(mChannel,new DnsSdServiceResponseListener() {
+		mAndroidP2Pmanager.setDnsSdResponseListeners(mChannel,
+				new DnsSdServiceResponseListener() {
 
 					@Override
 					public void onDnsSdServiceAvailable(String instanceName,
@@ -96,8 +96,12 @@ public class WDCCServiceManager {
 							service.serviceRegistrationType = registrationType;
 							Log.d(TAG, "onBonjourServiceAvailable "
 									+ instanceName);
-							
-							
+							Log.d(TAG, "onDnsSdServiceAvailable---1");
+
+							mManager.notifyServicesChanged(service, true);
+
+							Log.d(TAG, "onDnsSdServiceAvailable --2");
+
 						}
 					}
 
@@ -114,7 +118,7 @@ public class WDCCServiceManager {
 						Log.d(TAG,
 								device.deviceName + " is "
 										+ record.get(TXTRECORD_PROP_AVAILABLE));
-					
+
 					}
 				});
 
@@ -132,7 +136,8 @@ public class WDCCServiceManager {
 
 					@Override
 					public void onFailure(int error) {
-						Log.d(TAG, "addServiceRequest onFailure error = " + error);
+						Log.d(TAG, "addServiceRequest onFailure error = "
+								+ error);
 						// appendStatus("Failed adding service discovery request");
 					}
 				});

@@ -20,16 +20,16 @@ import android.util.Log;
  * with the WifiP2pDeviceList
  * 
  */
-public class WDCHPeerlistener implements WifiP2pManager.PeerListListener {
+public class WDCCPeerlistener implements WifiP2pManager.PeerListListener {
 
 	/**
 	 * 
 	 */
 	static int a = 0;
 	private List peers = new ArrayList();
-	protected static final String TAG = WDCHPeerlistener.class.getSimpleName();
+	protected static final String TAG = WDCCPeerlistener.class.getSimpleName();
     private List<WifiP2pDevice> items;
-	public WDCHPeerlistener() {
+	public WDCCPeerlistener() {
 		// TODO Auto-generated constructor stub
 	}
 

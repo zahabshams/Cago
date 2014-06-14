@@ -17,14 +17,14 @@ import android.util.Log;
 /**
  * A BroadcastReceiver that notifies of important wifi p2p events.
  */
-public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
+public class WDCCBroadcastReceiver extends BroadcastReceiver {
 
 	private WifiP2pManager manager;
 	private Channel channel;
 	private Activity activity;
-	private WDCHPeerlistener mPeerListener;
+	private WDCCPeerlistener mPeerListener;
 	public final IntentFilter intentFilter = new IntentFilter();
-	protected static final String TAG = WiFiDirectBroadcastReceiver.class
+	protected static final String TAG = WDCCBroadcastReceiver.class
 			.getSimpleName();
 
 	/**
@@ -35,10 +35,10 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
 	 * @param activity
 	 *            activity associated with the receiver
 	 */
-	public WiFiDirectBroadcastReceiver(WifiP2pManager manager, Channel channel,
-			Activity activity, WDCHPeerlistener peerlistener) {
+	public WDCCBroadcastReceiver(WifiP2pManager manager, Channel channel,
+			Activity activity, WDCCPeerlistener peerlistener) {
 		super();
-		Log.d(TAG,"creating WiFiDirectBroadcastReceiver");
+		Log.d(TAG,"creating WDCCBroadcastReceiver");
 		this.manager = manager;
 		this.channel = channel;
 		this.activity = activity;

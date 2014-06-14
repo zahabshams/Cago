@@ -40,7 +40,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.viewer.cagochat.Device_ListActivity"
+            android:name="com.viewer.cagochat.WDCCDevice_ListActivity"
             android:label="@string/title_activity_device__list" >
         </activity>
     </application>

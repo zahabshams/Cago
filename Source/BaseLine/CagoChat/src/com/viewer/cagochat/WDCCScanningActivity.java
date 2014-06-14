@@ -1,12 +1,15 @@
 package com.viewer.cagochat;
 
 import com.manager.cago.WDCCP2PManager;
+import com.manager.cago.WDCCP2PService;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
+import android.text.style.LineHeightSpan.WithDensity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,31 +25,36 @@ public class WDCCScanningActivity extends ActionBarActivity{
 	public static final int MESSAGE_READ = 0x400 + 1;
 	public static final int MY_HANDLE = 0x400 + 2;
 	public Button mbtnStartAnotherActivity;
-	public Context mContext = getApplicationContext();
+	public Context mContext = null;
 	private WDCCP2PManager mManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mContext = getApplicationContext();
+
+		WDCCP2PManager.iInstantiateManager(mContext);
 
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
 
 			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
+					.add(R.id.container, new WDCCScanningFragment()).commit();
 		}
-		mManager = WDCCP2PManager.getWDCCP2PManager(mContext);
 
 	}
 	@Override
 	 public void onResume () {
-		mManager.registerBroadCastReceiver(mContext);
+		super.onResume();
+		mManager = WDCCP2PManager.getWDCCP2PManager();
+		mManager.registerBroadCastReceiver();
 		
 	}
 	@Override
 	public void onPause(){
-		mManager.deregisterBroadCastReceiver(mContext);
+		super.onPause();
+		mManager.deregisterBroadCastReceiver();
 
 	}
 	@Override
@@ -72,17 +80,35 @@ public class WDCCScanningActivity extends ActionBarActivity{
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-		
-		public PlaceholderFragment() {
+	public static class WDCCScanningFragment extends Fragment implements WDCCViewerManager.DevList{
+		protected static final String TAG = WDCCScanningFragment.class
+				.getSimpleName();
+		private WDCCP2PManager mManager = null;
+
+		@Override
+		public void onPause() {
+			Log.d(TAG, "onPause(");
+			// TODO Auto-generated method stub
+			super.onStop();
 		}
 
+		@Override
+		public void onStop() {
+			Log.d(TAG, "onStop(");
+			// TODO Auto-generated method stub
+			super.onStop();
+		}
+		
+		
+		public WDCCScanningFragment() {
+		}
 
+		
 		OnClickListener browse = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), Device_ListActivity.class);
+				Intent intent = new Intent(getActivity(), WDCCDevice_ListActivity.class);
 				startActivity(intent);
 				
 			}
@@ -90,13 +116,26 @@ public class WDCCScanningActivity extends ActionBarActivity{
 
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			mManager = WDCCP2PManager.getWDCCP2PManager();
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			Button button = (Button) rootView
 					.findViewById(R.id.btnStartAnotherActivity);
 			button.setOnClickListener(browse);
-			
+			mManager.registerDevListListener(this);
 			return rootView;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.viewer.cagochat.WDCCViewerManager.DevList#notifyDeviceList(com.manager.cago.WDCCP2PService, boolean)
+		 */
+		@Override
+		public void notifyServicesChanged(WDCCP2PService service, boolean add) {
+			Log.d(TAG, "notifyServicesChanged");
+			mManager.deregisterDevListListener();
+			Intent intent = new Intent(getActivity(), WDCCDevice_ListActivity.class);
+			startActivity(intent);
+			
 		}
 	}
 }

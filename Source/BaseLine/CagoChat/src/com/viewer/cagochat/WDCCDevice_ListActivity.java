@@ -1,33 +1,41 @@
 package com.viewer.cagochat;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import com.manager.cago.WDCCP2PManager;
 import com.manager.cago.WDCCP2PService;
 
-import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
-
-public class Device_ListActivity extends Activity implements WDCCViewerManager.DevList{
+/**
+ * @author zahab
+ *
+ */
+public class WDCCDevice_ListActivity extends Activity {
 	public WDCCList_Fragment mDevice_List_Fragment = null;
 	public WDCCP2PManager mManager;
+	public Context mContext = null;
+	protected static final String TAG = WDCCDevice_ListActivity.class.getSimpleName();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+    	Log.d(TAG,"onCreate");
+
 		setContentView(R.layout.activity_device__list);
+		mManager = WDCCP2PManager.getWDCCP2PManager();
+		
+		mContext = mManager.getmContext();//getApplicationContext();
 		mDevice_List_Fragment = new WDCCList_Fragment();
+		mManager.registerDevListListener(mDevice_List_Fragment);
 		if (savedInstanceState == null) {
 			
 			getFragmentManager().beginTransaction()
-					.add(R.id.container, mDevice_List_Fragment/*new WDCCList_Fragment()*/).commit();
+					.add(R.id.container, mDevice_List_Fragment).commit();
 		}
-		mManager = WDCCP2PManager.getWDCCP2PManager(getApplicationContext());
 		
 	}
 
@@ -51,31 +59,11 @@ public class Device_ListActivity extends Activity implements WDCCViewerManager.D
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
+	/*@Override
+	public void onSaveInstanceState(Bundle bundle) {
+		super.onSaveInstanceState(bundle);
+      	Log.d(TAG,"onSaveInstanceState");
 
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_device__list,
-					container, false);
-			return rootView;
-		}
 	}
-
-	/* (non-Javadoc)
-	 * @see com.viewer.cagochat.WDCCViewerManager.DevList#notifyDeviceList()
-	 */
-	@Override
-	public void notifyDeviceList(WDCCP2PService service, boolean add) {
-		
-		// TODO Auto-generated method stub
-		
-	}
-
+*/
 }
