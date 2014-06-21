@@ -18,7 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class WDCCScanningActivity extends ActionBarActivity{
+public class WDCCScanningActivity extends ActionBarActivity {
 	protected static final String TAG = WDCCScanningActivity.class
 			.getSimpleName();
 
@@ -44,19 +44,22 @@ public class WDCCScanningActivity extends ActionBarActivity{
 		}
 
 	}
+
 	@Override
-	 public void onResume () {
+	public void onResume() {
 		super.onResume();
 		mManager = WDCCP2PManager.getWDCCP2PManager();
 		mManager.registerBroadCastReceiver();
-		
-	}
-	@Override
-	public void onPause(){
-		super.onPause();
-		mManager.deregisterBroadCastReceiver();
 
 	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		//mManager.deregisterBroadCastReceiver();
+
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -80,7 +83,8 @@ public class WDCCScanningActivity extends ActionBarActivity{
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class WDCCScanningFragment extends Fragment implements WDCCViewerManager.DevList{
+	public static class WDCCScanningFragment extends Fragment implements
+			WDCCViewerManager.DevList {
 		protected static final String TAG = WDCCScanningFragment.class
 				.getSimpleName();
 		private WDCCP2PManager mManager = null;
@@ -98,19 +102,18 @@ public class WDCCScanningActivity extends ActionBarActivity{
 			// TODO Auto-generated method stub
 			super.onStop();
 		}
-		
-		
+
 		public WDCCScanningFragment() {
 		}
 
-		
 		OnClickListener browse = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(getActivity(), WDCCDevice_ListActivity.class);
+				Intent intent = new Intent(getActivity(),
+						WDCCDevice_ListActivity.class);
 				startActivity(intent);
-				
+
 			}
 		};
 
@@ -126,16 +129,21 @@ public class WDCCScanningActivity extends ActionBarActivity{
 			return rootView;
 		}
 
-		/* (non-Javadoc)
-		 * @see com.viewer.cagochat.WDCCViewerManager.DevList#notifyDeviceList(com.manager.cago.WDCCP2PService, boolean)
+		/*
+		 * (non-Javadoc)
+		 * 
+		 * @see
+		 * com.viewer.cagochat.WDCCViewerManager.DevList#notifyDeviceList(com
+		 * .manager.cago.WDCCP2PService, boolean)
 		 */
 		@Override
 		public void notifyServicesChanged(WDCCP2PService service, boolean add) {
 			Log.d(TAG, "notifyServicesChanged");
 			mManager.deregisterDevListListener();
-			Intent intent = new Intent(getActivity(), WDCCDevice_ListActivity.class);
+			Intent intent = new Intent(getActivity(),
+					WDCCDevice_ListActivity.class);
 			startActivity(intent);
-			
+
 		}
 	}
 }

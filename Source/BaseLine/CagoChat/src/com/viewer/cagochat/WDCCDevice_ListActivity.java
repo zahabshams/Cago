@@ -12,31 +12,32 @@ import com.manager.cago.WDCCP2PService;
 
 /**
  * @author zahab
- *
+ * 
  */
 public class WDCCDevice_ListActivity extends Activity {
 	public WDCCList_Fragment mDevice_List_Fragment = null;
 	public WDCCP2PManager mManager;
 	public Context mContext = null;
-	protected static final String TAG = WDCCDevice_ListActivity.class.getSimpleName();
+	protected static final String TAG = WDCCDevice_ListActivity.class
+			.getSimpleName();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-    	Log.d(TAG,"onCreate");
+		Log.d(TAG, "onCreate");
 
 		setContentView(R.layout.activity_device__list);
 		mManager = WDCCP2PManager.getWDCCP2PManager();
-		
-		mContext = mManager.getmContext();//getApplicationContext();
+
+		mContext = mManager.getappContext();// getApplicationContext();
 		mDevice_List_Fragment = new WDCCList_Fragment();
 		mManager.registerDevListListener(mDevice_List_Fragment);
 		if (savedInstanceState == null) {
-			
+
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, mDevice_List_Fragment).commit();
 		}
-		
+
 	}
 
 	@Override
@@ -59,11 +60,10 @@ public class WDCCDevice_ListActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/*@Override
-	public void onSaveInstanceState(Bundle bundle) {
-		super.onSaveInstanceState(bundle);
-      	Log.d(TAG,"onSaveInstanceState");
-
-	}
-*/
+	/*
+	 * @Override public void onSaveInstanceState(Bundle bundle) {
+	 * super.onSaveInstanceState(bundle); Log.d(TAG,"onSaveInstanceState");
+	 * 
+	 * }
+	 */
 }

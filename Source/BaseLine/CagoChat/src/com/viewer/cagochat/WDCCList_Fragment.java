@@ -1,5 +1,3 @@
-
-
 package com.viewer.cagochat;
 
 import java.util.ArrayList;
@@ -31,7 +29,6 @@ import com.manager.cago.WDCCP2PService;
 public class WDCCList_Fragment extends ListFragment implements
 		WDCCViewerManager.DevList {
 
-
 	private List<WDCCP2PService> mServiceDeviceList = new ArrayList<WDCCP2PService>();
 	ProgressDialog progressDialog = null;
 	View mContentView = null;
@@ -41,21 +38,18 @@ public class WDCCList_Fragment extends ListFragment implements
 	public Context mContext = null;
 	protected static final String TAG = WDCCList_Fragment.class.getSimpleName();
 
-
 	public WDCCList_Fragment() {
 		Log.d(TAG, "WDCCList_Fragment created");
 
 		mManager = WDCCP2PManager.getWDCCP2PManager();
-		mContext = mManager.getmContext();
-		
-
+		mContext = mManager.getappContext();
 
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG,"onCreate registerDevListListener");
+		Log.d(TAG, "onCreate registerDevListListener");
 		mManager.registerDevListListener(this);
 	}
 
@@ -73,7 +67,6 @@ public class WDCCList_Fragment extends ListFragment implements
 				R.layout.row_devices, mServiceDeviceList);
 		this.setListAdapter(mPeerListAdapter);
 
-
 		if (savedInstanceState == null) {
 			Log.d(TAG, "savedInstanceState == null");
 
@@ -89,15 +82,16 @@ public class WDCCList_Fragment extends ListFragment implements
 		Log.d(TAG, "onSaveInstanceState");
 
 	}
+
 	@Override
 	public void onPause() {
-		Log.d(TAG,"onPause");
+		Log.d(TAG, "onPause");
 		super.onPause();
 	}
 
 	@Override
 	public void onResume() {
-		Log.d(TAG,"onResume");
+		Log.d(TAG, "onResume");
 		mManager.registerDevListListener(this);
 		mServiceDeviceList.clear();
 		mServiceDeviceList.addAll(mManager.getServiceList());
@@ -107,7 +101,7 @@ public class WDCCList_Fragment extends ListFragment implements
 
 	@Override
 	public void onStop() {
-		Log.d(TAG,"onStop");
+		Log.d(TAG, "onStop");
 
 		super.onStop();
 	}
@@ -153,7 +147,7 @@ public class WDCCList_Fragment extends ListFragment implements
 	 */
 	private class WiFiPeerListAdapter extends ArrayAdapter<WDCCP2PService> {
 
-		//private List<WDCCP2PService> items;
+		// private List<WDCCP2PService> items;
 
 		/**
 		 * @param context
@@ -163,7 +157,7 @@ public class WDCCList_Fragment extends ListFragment implements
 		public WiFiPeerListAdapter(Context context, int textViewResourceId,
 				List<WDCCP2PService> objects) {
 			super(context, textViewResourceId, objects);
-			//items = mServiceDeviceList;
+			// items = mServiceDeviceList;
 
 		}
 
@@ -176,7 +170,7 @@ public class WDCCList_Fragment extends ListFragment implements
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				v = vi.inflate(R.layout.peerlist, null);
 			}
-			WDCCP2PService service = mServiceDeviceList.get(position);//items.get(position);
+			WDCCP2PService service = mServiceDeviceList.get(position);// items.get(position);
 			WifiP2pDevice device = service.device;
 			if (device != null) {
 				TextView top = (TextView) v.findViewById(R.id.txt);
@@ -204,7 +198,6 @@ public class WDCCList_Fragment extends ListFragment implements
 		view = (TextView) mContentView.findViewById(R.id.my_status);
 		view.setText(getDeviceStatus(device.status));
 	}
-
 
 	public void clearPeers() {
 		mServiceDeviceList.clear();

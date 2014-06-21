@@ -22,7 +22,6 @@ import android.util.Log;
  */
 public class WDCCServiceManager {
 
-
 	protected static final String TAG = WDCCServiceManager.class
 			.getSimpleName();
 	public static final String TXTRECORD_PROP_AVAILABLE = "available";
@@ -33,7 +32,19 @@ public class WDCCServiceManager {
 	static final int SERVER_PORT = 4545;
 	private Channel mChannel;
 	private WifiP2pDnsSdServiceRequest serviceRequest;
-    
+	private boolean ret = false;
+	static int numberServiceAdded =0;
+	static int numberdiscoverer =0;
+
+
+
+	/**
+	 * @return the serviceRequest
+	 */
+	public WifiP2pDnsSdServiceRequest getServiceRequest() {
+		return serviceRequest;
+	}
+
 	public WDCCServiceManager(Channel channel,
 			WifiP2pManager androidP2PManager, WDCCP2PManager manager) {
 
@@ -50,7 +61,8 @@ public class WDCCServiceManager {
 
 		WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
 				SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
-		Log.d(TAG, "adding LocalService");
+		++numberServiceAdded;
+		Log.d(TAG, "adding LocalService " + numberServiceAdded);
 
 		mAndroidP2Pmanager.addLocalService(mChannel, service,
 				new ActionListener() {
@@ -73,12 +85,12 @@ public class WDCCServiceManager {
 	}
 
 	private void discoverService() {
-
+		++numberdiscoverer;
 		/*
 		 * Register listeners for DNS-SD services. These are callbacks invoked
 		 * by the system when a service is actually discovered.
 		 */
-		Log.d(TAG, "In discoverService ");
+		Log.d(TAG, "In discoverService numberdiscoverer =" + numberdiscoverer);
 
 		mAndroidP2Pmanager.setDnsSdResponseListeners(mChannel,
 				new DnsSdServiceResponseListener() {
@@ -156,6 +168,25 @@ public class WDCCServiceManager {
 
 			}
 		});
+	}
+
+	public boolean removeService() {
+		mAndroidP2Pmanager.removeServiceRequest(mChannel, serviceRequest,
+				new ActionListener() {
+
+					@Override
+					public void onSuccess() {
+						Log.d(TAG, "removeService onSuccess");
+						ret = true;
+					}
+
+					@Override
+					public void onFailure(int arg0) {
+						Log.d(TAG, "removeService onFailure");
+						ret = false;
+					}
+				});
+		return ret;
 	}
 
 }
