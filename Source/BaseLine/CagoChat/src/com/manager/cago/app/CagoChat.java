@@ -3,20 +3,21 @@
  */
 package com.manager.cago.app;
 
-import com.manager.cago.WDCCP2PManager;
-
 import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
 import android.content.ComponentCallbacks;
 import android.content.res.Configuration;
 import android.util.Log;
 
+import com.manager.cago.WDCCP2PManager;
+
 /**
  * @author zahab
- *
+ * <blockquote>
+ * This holds remains active throughout the lifecycle of Application.
+ * @version ver.0.1
  */
 public class CagoChat extends Application {
-	
+
 	WDCCP2PManager mManager = null;
 	private String TAG = "WDCCCagoChat";
 
@@ -25,11 +26,14 @@ public class CagoChat extends Application {
 	 */
 	public CagoChat() {
 		Log.d(TAG, "CagoChat");
-		//mManager = WDCCP2PManager.iInstantiateManager(getApplicationContext());
+		// mManager =
+		// WDCCP2PManager.iInstantiateManager(getApplicationContext());
 		// TODO Auto-generated constructor stub
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Application#onCreate()
 	 */
 	@Override
@@ -40,7 +44,9 @@ public class CagoChat extends Application {
 		super.onCreate();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see android.app.Application#onTerminate()
 	 */
 	@Override
@@ -48,8 +54,11 @@ public class CagoChat extends Application {
 		super.onTerminate();
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Application#onConfigurationChanged(android.content.res.Configuration)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#onConfigurationChanged(android.content.res.
+	 * Configuration)
 	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -57,8 +66,11 @@ public class CagoChat extends Application {
 		super.onConfigurationChanged(newConfig);
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Application#registerComponentCallbacks(android.content.ComponentCallbacks)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Application#registerComponentCallbacks(android.content.
+	 * ComponentCallbacks)
 	 */
 	@Override
 	public void registerComponentCallbacks(ComponentCallbacks callback) {
@@ -66,8 +78,12 @@ public class CagoChat extends Application {
 		super.registerComponentCallbacks(callback);
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.Application#registerActivityLifecycleCallbacks(android.app.Application.ActivityLifecycleCallbacks)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * android.app.Application#registerActivityLifecycleCallbacks(android.app
+	 * .Application.ActivityLifecycleCallbacks)
 	 */
 	@Override
 	public void registerActivityLifecycleCallbacks(

@@ -22,7 +22,6 @@ public class WDCCClientSocketMgr extends Thread {
 	protected static final String TAG = WDCCBroadcastReceiver.class
 			.getSimpleName();
 
-	//private Handler mHandler;
 	private WDCCChatMgr mChatMgr;
 	private InetAddress mAddress;
 	private WDCCP2PManager mManager = null;

@@ -29,19 +29,14 @@ public class WDCCChatMgr implements Runnable {
 	protected static final String TAG = WDCCChatMgr.class.getSimpleName();
 	private Socket socket = null;
 	private Handler handler;
-	private WDCCP2PManager mManager = null;
 
 	/**
 	 * @param handler
 	 * @param socket
 	 * 
 	 */
-	public WDCCChatMgr(Socket socket/* , Handler handler */) {
+	public WDCCChatMgr(Socket socket) {
 		this.socket = socket;
-		mManager = WDCCP2PManager.getWDCCP2PManager();
-		/*
-		 * this.handler = handler;
-		 */
 	}
 
 	public interface MessageTarget {
@@ -64,12 +59,6 @@ public class WDCCChatMgr implements Runnable {
 			oStream = socket.getOutputStream();
 			byte[] buffer = new byte[1024];
 			int bytes;
-
-			/*
-			 * handler.obtainMessage(WiFiServiceDiscoveryActivity.MY_HANDLE,
-			 * this) .sendToTarget();
-			 */
-
 			while (true) {
 				try {
 					// Read from the InputStream
@@ -80,7 +69,7 @@ public class WDCCChatMgr implements Runnable {
 
 					// Send the obtained bytes to the UI Activity
 					Log.d(TAG, "Rec:" + String.valueOf(buffer));
-					Log.d(TAG, "data -----"+buffer.toString());
+					Log.d(TAG, "data -----" + buffer.toString());
 					if (handler != null) {
 						handler.obtainMessage(ChatActivity_Test.MESSAGE_READ,
 								bytes, -1, buffer).sendToTarget();

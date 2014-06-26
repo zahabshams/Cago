@@ -157,13 +157,13 @@ public class WDCCServiceManager {
 
 			@Override
 			public void onSuccess() {
-				Log.d(TAG, "discoverServices onSuccess");
+				Log.d(TAG, "Service discovery initiated sucessfully");
 				// appendStatus("Service discovery initiated");
 			}
 
 			@Override
 			public void onFailure(int error) {
-				Log.d(TAG, "discoverServices onFailure error = " + error);
+				Log.d(TAG, "Service discovery initiation failed error = " + error);
 				// appendStatus("Service discovery failed");
 
 			}
@@ -171,6 +171,7 @@ public class WDCCServiceManager {
 	}
 
 	public boolean removeService() {
+		Log.d(TAG, "Removing the advertised service");
 		mAndroidP2Pmanager.removeServiceRequest(mChannel, serviceRequest,
 				new ActionListener() {
 

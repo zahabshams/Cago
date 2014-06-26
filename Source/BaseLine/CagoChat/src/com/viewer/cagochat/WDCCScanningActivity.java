@@ -1,14 +1,10 @@
 package com.viewer.cagochat;
 
-import com.manager.cago.WDCCP2PManager;
-import com.manager.cago.WDCCP2PService;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.text.style.LineHeightSpan.WithDensity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +13,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.manager.cago.WDCCP2PManager;
+import com.manager.cago.WDCCP2PService;
 
 public class WDCCScanningActivity extends ActionBarActivity {
 	protected static final String TAG = WDCCScanningActivity.class

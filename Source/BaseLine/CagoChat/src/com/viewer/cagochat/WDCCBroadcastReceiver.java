@@ -4,7 +4,6 @@ package com.viewer.cagochat;
 
  */
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -88,7 +87,7 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 				//Log.d(TAG,"Connected to p2p network. Requesting network details" + mAndroidP2PManager + mchannel + mManager.getmConnectionMgr());
 				
 				
-				mAndroidP2PManager.requestConnectionInfo(mchannel,mManager.getmConnectionMgr());
+				mAndroidP2PManager.requestConnectionInfo(mchannel,mManager.getConnectionMgr());
 			} else {
 				// It's a disconnect
 			}

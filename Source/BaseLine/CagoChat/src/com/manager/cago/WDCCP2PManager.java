@@ -5,6 +5,7 @@ package com.manager.cago;
 
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -17,33 +18,34 @@ import android.util.Log;
 
 import com.viewer.cagochat.ChatActivity_Test;
 import com.viewer.cagochat.WDCCBroadcastReceiver;
-import com.viewer.cagochat.WDCCDevice_ListActivity;
 import com.viewer.cagochat.WDCCPeerlistener;
 import com.viewer.cagochat.WDCCViewerManager;
 
 /**
- * @author zahab
- *<blockquote> 		   Singleton class to handle discovery, connection and data to UI
- *         layer. This class will act as a bridge between UI and P2P operations related to
- *         registration, discovery,connection 
+ * @author zahab <blockquote> Singleton class to handle discovery, connection
+ *         and data to UI layer. This class will act as a bridge between UI and
+ *         P2P operations related to registration, discovery,connection
  * 
  */
 
 public class WDCCP2PManager {
-	
+
 	/**
 	 * @return the mConnectionMgr
 	 */
-	public WDCCConnectionMgr getmConnectionMgr() {
+	public WDCCConnectionMgr getConnectionMgr() {
 		return mConnectionMgr;
 	}
+
 	private static WDCCP2PManager mManager = null;
+
 	/**
 	 * @return the mManager
 	 */
 	private static WDCCP2PManager getmManager() {
 		return mManager;
 	}
+
 	/**
 	 * @return WDCCP2PManager
 	 */
@@ -52,6 +54,7 @@ public class WDCCP2PManager {
 
 		return getmManager();
 	}
+
 	/**
 	 * @param mManager
 	 *            the mManager to set
@@ -70,66 +73,70 @@ public class WDCCP2PManager {
 
 		return mManager;
 	}
+
 	public WDCCPeerlistener mWDPeerlistener = null;
 
 	public WDCCBroadcastReceiver mP2PBroadcastReceiver = null;
 	private WifiP2pManager mAndroidP2Pmanager = null;
 
 	public Context mContext = null;
-
-	private List<WDCCP2PService> mServiceList = new ArrayList<WDCCP2PService>();
+	private List<WDCCP2PService> mServiceList = null;
+	// private List<WDCCP2PService> mServiceList = new
+	// ArrayList<WDCCP2PService>();
 	private Channel mChannel = null;
 	private WDCCConnectionMgr mConnectionMgr = null;
 	private WDCCServiceManager mServiceManager = null;
 	private WDCCViewerManager.DevList mDevListListener;
-	private Runnable run= null;
+	private Runnable run = null;
 	protected static final String TAG = WDCCP2PManager.class.getSimpleName();
-	private WDCCDevice_ListActivity mDevListActivity;
 	private WDCCChatMgr mChatMgr;
 
 	protected WDCCP2PManager(Context context) {
 		Log.d(TAG, "WDCCP2PManager created");
 		mContext = context;
 		run = new Runnable() {
-			
+
 			@Override
 			public void run() {
 				initialise();
-				
+
 			}
 		};
 		Thread thread = new Thread(run);
 		thread.start();
-		//initialise();
+		// initialise();
 	}
+
 	/**
 	 * @return the mChatMgr
 	 */
 	public WDCCChatMgr getChatMgr() {
 		return mChatMgr;
 	}
+
 	/**
 	 * 
 	 */
 	public WDCCChatMgr startChat(Socket socket) {
-		Log.d(TAG,"startChat------------1");
+		Log.d(TAG, "startChat------------1");
 		mChatMgr = new WDCCChatMgr(socket);
-		Log.d(TAG,"startChat------------2");
+		Log.d(TAG, "startChat------------2");
 		Intent intent = new Intent(mContext, ChatActivity_Test.class);
-		Log.d(TAG,"startChat------------3");
-		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Log.d(TAG, "startChat------------3");
+		// intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mContext.startActivity(intent);
-		Log.d(TAG,"startChat------------4");
+		Log.d(TAG, "startChat------------4");
 		return mChatMgr;
-		
+
 	}
+
 	public void setChatMsgHandler(Handler handler) {
-		if(mChatMgr != null)
+		if (mChatMgr != null)
 			mChatMgr.setHandler(handler);
-			
-		
+
 	}
+
 	public void cMStartConnection() {
 
 	}
@@ -179,21 +186,21 @@ public class WDCCP2PManager {
 	 */
 	private void initialise() {
 		Log.d(TAG, "-------------------initialise---------------------------");
+		mServiceList = Collections.synchronizedList(new ArrayList<WDCCP2PService>());
 		mWDPeerlistener = new WDCCPeerlistener();
 		mAndroidP2Pmanager = (WifiP2pManager) mContext
 				.getSystemService(Context.WIFI_P2P_SERVICE);
 		// zahab need to work on third argument of initialize which is null now.
 		mChannel = mAndroidP2Pmanager.initialize(mContext,
 				mContext.getMainLooper(), null);
-				mConnectionMgr = new WDCCConnectionMgr();
+		mConnectionMgr = new WDCCConnectionMgr();
 
 		mP2PBroadcastReceiver = new WDCCBroadcastReceiver(mAndroidP2Pmanager,
 				mChannel, mWDPeerlistener);
 		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager,
 				this);
 		mServiceManager.startRegistrationAndDiscovery();
-/*		mConnectionMgr = new WDCCConnectionMgr();
-*/
+
 	}
 
 	public boolean notifyDeviceDisconnected(WifiP2pDevice device) {
@@ -235,14 +242,14 @@ public class WDCCP2PManager {
 		mDevListListener = null;
 		mDevListListener = devListListener;
 	}
-	
-	public boolean removeService(){
+
+	public boolean removeService() {
 		return mServiceManager.removeService();
 	}
-	
-	public void connectP2p(WDCCP2PService service){
+
+	public void connectP2p(WDCCP2PService service) {
 		mConnectionMgr.connectP2p(service);
-		
+
 	}
 
 }

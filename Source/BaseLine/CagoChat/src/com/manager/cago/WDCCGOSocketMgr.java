@@ -25,8 +25,8 @@ import android.util.Log;
 public class WDCCGOSocketMgr extends Thread{
 	 	ServerSocket socket = null;
 	    private final int THREAD_COUNT = 10;
-	    private Handler handler;
-		protected static final String TAG = WDCCGOSocketMgr.class.getSimpleName();
+/*	    private Handler handler;
+*/		protected static final String TAG = WDCCGOSocketMgr.class.getSimpleName();
 		private WDCCP2PManager mManger = null;
 
 	/**
@@ -38,8 +38,8 @@ public class WDCCGOSocketMgr extends Thread{
 		 try {
 			 Log.d(TAG, "creating Connected as group owner");
 	            socket = new ServerSocket(4545);
-	            this.handler = handler;
-	            Log.d(TAG, "Socket Started");
+/*	            this.handler = handler;
+*/	            Log.d(TAG, "Socket Started");
 	        } catch (IOException e) {
 	            Log.d(TAG, "Socket catch");
 	            e.printStackTrace();

@@ -1,6 +1,5 @@
 package com.viewer.cagochat;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.manager.cago.WDCCP2PManager;
-import com.manager.cago.WDCCP2PService;
 
 /**
  * @author zahab
