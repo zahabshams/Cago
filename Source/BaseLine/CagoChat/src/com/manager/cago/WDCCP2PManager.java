@@ -15,8 +15,8 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Handler;
 import android.util.Log;
 
+import com.viewer.cagochat.ChatActivity_Test;
 import com.viewer.cagochat.WDCCBroadcastReceiver;
-import com.viewer.cagochat.WDCCChatActivity;
 import com.viewer.cagochat.WDCCDevice_ListActivity;
 import com.viewer.cagochat.WDCCPeerlistener;
 import com.viewer.cagochat.WDCCViewerManager;
@@ -24,8 +24,8 @@ import com.viewer.cagochat.WDCCViewerManager;
 /**
  * @author zahab
  *<blockquote> 		   Singleton class to handle discovery, connection and data to UI
- *         layer. This class will act as a bridge UI and P2P operations related
- *         registration discover,connection
+ *         layer. This class will act as a bridge between UI and P2P operations related to
+ *         registration, discovery,connection 
  * 
  */
 
@@ -82,7 +82,7 @@ public class WDCCP2PManager {
 	private WDCCConnectionMgr mConnectionMgr = null;
 	private WDCCServiceManager mServiceManager = null;
 	private WDCCViewerManager.DevList mDevListListener;
-
+	private Runnable run= null;
 	protected static final String TAG = WDCCP2PManager.class.getSimpleName();
 	private WDCCDevice_ListActivity mDevListActivity;
 	private WDCCChatMgr mChatMgr;
@@ -90,18 +90,37 @@ public class WDCCP2PManager {
 	protected WDCCP2PManager(Context context) {
 		Log.d(TAG, "WDCCP2PManager created");
 		mContext = context;
-		initialise();
+		run = new Runnable() {
+			
+			@Override
+			public void run() {
+				initialise();
+				
+			}
+		};
+		Thread thread = new Thread(run);
+		thread.start();
+		//initialise();
 	}
-
+	/**
+	 * @return the mChatMgr
+	 */
+	public WDCCChatMgr getChatMgr() {
+		return mChatMgr;
+	}
 	/**
 	 * 
 	 */
 	public WDCCChatMgr startChat(Socket socket) {
-		Log.d(TAG,"startChat");
+		Log.d(TAG,"startChat------------1");
 		mChatMgr = new WDCCChatMgr(socket);
-		Intent intent = new Intent(mContext, WDCCChatActivity.class);
+		Log.d(TAG,"startChat------------2");
+		Intent intent = new Intent(mContext, ChatActivity_Test.class);
+		Log.d(TAG,"startChat------------3");
+		//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mContext.startActivity(intent);
-
+		Log.d(TAG,"startChat------------4");
 		return mChatMgr;
 		
 	}
@@ -151,7 +170,6 @@ public class WDCCP2PManager {
 	public List<WDCCP2PService> getServiceList() {
 		Log.d(TAG, "getServiceList");
 		return mServiceList;
-		// TODO Auto-generated method stub
 
 	}
 
@@ -170,7 +188,7 @@ public class WDCCP2PManager {
 				mConnectionMgr = new WDCCConnectionMgr();
 
 		mP2PBroadcastReceiver = new WDCCBroadcastReceiver(mAndroidP2Pmanager,
-				mChannel, null, mWDPeerlistener);
+				mChannel, mWDPeerlistener);
 		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager,
 				this);
 		mServiceManager.startRegistrationAndDiscovery();
@@ -205,7 +223,6 @@ public class WDCCP2PManager {
 
 		mContext.registerReceiver(mP2PBroadcastReceiver,
 				mP2PBroadcastReceiver.intentFilter);
-
 	}
 
 	/**
@@ -221,6 +238,10 @@ public class WDCCP2PManager {
 	
 	public boolean removeService(){
 		return mServiceManager.removeService();
+	}
+	
+	public void connectP2p(WDCCP2PService service){
+		mConnectionMgr.connectP2p(service);
 		
 	}
 

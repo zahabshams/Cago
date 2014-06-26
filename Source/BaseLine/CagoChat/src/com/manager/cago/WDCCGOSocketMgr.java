@@ -36,10 +36,12 @@ public class WDCCGOSocketMgr extends Thread{
 	public WDCCGOSocketMgr(Handler handler) throws IOException {
 			mManger = WDCCP2PManager.getWDCCP2PManager();
 		 try {
+			 Log.d(TAG, "creating Connected as group owner");
 	            socket = new ServerSocket(4545);
 	            this.handler = handler;
-	            Log.d("GroupOwnerSocketHandler", "Socket Started");
+	            Log.d(TAG, "Socket Started");
 	        } catch (IOException e) {
+	            Log.d(TAG, "Socket catch");
 	            e.printStackTrace();
 	            pool.shutdownNow();
 	            throw e;

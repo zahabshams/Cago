@@ -1,7 +1,6 @@
 package com.viewer.cagochat;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import android.app.ListFragment;
@@ -64,7 +63,10 @@ public class WDCCList_Fragment extends ListFragment implements
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
 		mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
-				R.layout.row_devices, mServiceDeviceList);
+				R.layout./*peerlist*/row_devices, mServiceDeviceList);
+		 /* android.R.layout.simple_list_item_2, android.R.id.text1*/
+		 /* mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
+				  android.R.layout.simple_list_item_2, mServiceDeviceList);*/
 		this.setListAdapter(mPeerListAdapter);
 
 		if (savedInstanceState == null) {
@@ -137,9 +139,12 @@ public class WDCCList_Fragment extends ListFragment implements
 	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(
+		Log.d(TAG,"----------onListItemClick----------------");
+		WDCCP2PService service = (WDCCP2PService) getListAdapter().getItem(position);
+		mManager.connectP2p(service);
+		/*WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(
 				position);
-		((DeviceActionListener) getActivity()).showDetails(device);
+		((DeviceActionListener) getActivity()).showDetails(device);*/
 	}
 
 	/**
@@ -158,9 +163,10 @@ public class WDCCList_Fragment extends ListFragment implements
 				List<WDCCP2PService> objects) {
 			super(context, textViewResourceId, objects);
 			// items = mServiceDeviceList;
+			Log.d(TAG, "WiFiPeerListAdapter");
 
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Log.d(TAG, "getView");
@@ -168,12 +174,13 @@ public class WDCCList_Fragment extends ListFragment implements
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getActivity()
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				v = vi.inflate(R.layout.peerlist, null);
+				//v = vi.inflate(R.layout.peerlist, null);
+				v = vi.inflate(R.layout.row_devices, null);
 			}
 			WDCCP2PService service = mServiceDeviceList.get(position);// items.get(position);
 			WifiP2pDevice device = service.device;
 			if (device != null) {
-				TextView top = (TextView) v.findViewById(R.id.txt);
+				TextView top = (TextView) v.findViewById(R.id.device_name/*txt*/);
 				if (top != null) {
 					top.setText(device.deviceName);
 				}

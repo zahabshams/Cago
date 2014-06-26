@@ -3,6 +3,7 @@ package com.viewer.cagochat;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import com.manager.cago.WDCCP2PService;
  * @author zahab
  * 
  */
-public class WDCCDevice_ListActivity extends Activity {
+public class WDCCDevice_ListActivity extends /*Activity*/ActionBarActivity {
 	public WDCCList_Fragment mDevice_List_Fragment = null;
 	public WDCCP2PManager mManager;
 	public Context mContext = null;
@@ -26,7 +27,7 @@ public class WDCCDevice_ListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG, "onCreate");
 
-		setContentView(R.layout.activity_device__list);
+		setContentView(R.layout.activity_device_list);
 		mManager = WDCCP2PManager.getWDCCP2PManager();
 
 		mContext = mManager.getappContext();// getApplicationContext();
@@ -59,6 +60,9 @@ public class WDCCDevice_ListActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	
+
 
 	/*
 	 * @Override public void onSaveInstanceState(Bundle bundle) {

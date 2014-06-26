@@ -11,7 +11,7 @@ import java.net.Socket;
 import android.os.Handler;
 import android.util.Log;
 
-import com.viewer.cagochat.WDCCChatActivity;
+import com.viewer.cagochat.ChatActivity_Test;
 
 /**
  * @author zahab
@@ -30,16 +30,18 @@ public class WDCCChatMgr implements Runnable {
 	private Socket socket = null;
 	private Handler handler;
 	private WDCCP2PManager mManager = null;
+
 	/**
 	 * @param handler
 	 * @param socket
 	 * 
 	 */
-	public WDCCChatMgr(Socket socket/*, Handler handler*/) {
+	public WDCCChatMgr(Socket socket/* , Handler handler */) {
 		this.socket = socket;
-		mManager= WDCCP2PManager.getWDCCP2PManager();
-/*		this.handler = handler;
-*/
+		mManager = WDCCP2PManager.getWDCCP2PManager();
+		/*
+		 * this.handler = handler;
+		 */
 	}
 
 	public interface MessageTarget {
@@ -56,51 +58,48 @@ public class WDCCChatMgr implements Runnable {
 	 */
 	@Override
 	public void run() {
-
 		try {
+
 			iStream = socket.getInputStream();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
 			oStream = socket.getOutputStream();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			byte[] buffer = new byte[1024];
+			int bytes;
 
-		byte[] buffer = new byte[1024];
-		int bytes;
-		// handler.obtainMessage(WDCCChatActivity.MY_HANDLE,
-		// this).sendToTarget();
+			/*
+			 * handler.obtainMessage(WiFiServiceDiscoveryActivity.MY_HANDLE,
+			 * this) .sendToTarget();
+			 */
 
-		while (true) {
-			try {
-				/**
-				 * <blockquote> Read from the InputStream
-				 */
-				bytes = iStream.read(buffer);
-				if (bytes == -1) {
-					break;
-				}
-
-				// Send the obtained bytes to the UI Activity
-				Log.d(TAG, "Rec:" + String.valueOf(buffer));
-				if (handler != null) {
-					handler.obtainMessage(WDCCChatActivity.MESSAGE_READ, bytes,
-							-1, buffer).sendToTarget();
-				}
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
+			while (true) {
 				try {
-					socket.close();
+					// Read from the InputStream
+					bytes = iStream.read(buffer);
+					if (bytes == -1) {
+						break;
+					}
+
+					// Send the obtained bytes to the UI Activity
+					Log.d(TAG, "Rec:" + String.valueOf(buffer));
+					Log.d(TAG, "data -----"+buffer.toString());
+					if (handler != null) {
+						handler.obtainMessage(ChatActivity_Test.MESSAGE_READ,
+								bytes, -1, buffer).sendToTarget();
+					}
+
 				} catch (IOException e) {
-					e.printStackTrace();
+					Log.e(TAG, "disconnected", e);
 				}
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 
 	public void write(byte[] buffer) {

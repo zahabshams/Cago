@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.manager.cago.WDCCChatMgr;
+import com.manager.cago.WDCCP2PManager;
 
 /**
  * This fragment handles chat related UI which includes a list view for messages
@@ -30,6 +31,7 @@ public class WiFiChatFragment extends Fragment {
     private TextView chatLine;
     private ListView listView;
     ChatMessageAdapter adapter = null;
+    private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
     private List<String> items = new ArrayList<String>();
 
     @Override
@@ -56,6 +58,7 @@ public class WiFiChatFragment extends Fragment {
                         }
                     }
                 });
+    	chatManager = mManager.getChatMgr();
         return view;
     }
 

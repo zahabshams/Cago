@@ -31,10 +31,11 @@ public class WDCCScanningActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mContext = getApplicationContext();
+	/*	mContext = getApplicationContext();
 
-		WDCCP2PManager.iInstantiateManager(mContext);
-
+		WDCCP2PManager.iInstantiateManager(mContext);*/
+		mManager = WDCCP2PManager.getWDCCP2PManager();
+		mContext = mManager.getappContext();
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
