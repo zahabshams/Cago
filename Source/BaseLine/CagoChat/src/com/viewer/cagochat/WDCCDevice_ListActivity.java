@@ -2,10 +2,13 @@ package com.viewer.cagochat;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.manager.cago.WDCCP2PManager;
 
@@ -13,7 +16,7 @@ import com.manager.cago.WDCCP2PManager;
  * @author zahab
  * 
  */
-public class WDCCDevice_ListActivity extends /*Activity*/ActionBarActivity {
+public class WDCCDevice_ListActivity extends ActionBarActivity {
 	public WDCCList_Fragment mDevice_List_Fragment = null;
 	public WDCCP2PManager mManager;
 	public Context mContext = null;
@@ -36,6 +39,14 @@ public class WDCCDevice_ListActivity extends /*Activity*/ActionBarActivity {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, mDevice_List_Fragment).commit();
 		}
+		//Adds images to action bar
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowCustomEnabled(true);
+
+		LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = inflator.inflate(R.layout.actionbarlayout, null);
+
+		actionBar.setCustomView(v);
 
 	}
 
@@ -43,11 +54,11 @@ public class WDCCDevice_ListActivity extends /*Activity*/ActionBarActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.device__list, menu);
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 
-	@Override
+/*	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
@@ -57,10 +68,7 @@ public class WDCCDevice_ListActivity extends /*Activity*/ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-	
-	
-
+	}*/
 
 	/*
 	 * @Override public void onSaveInstanceState(Bundle bundle) {

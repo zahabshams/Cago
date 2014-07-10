@@ -6,6 +6,8 @@ package com.manager.cago;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.manager.cago.WDCCP2PService.serviceOperation;
+
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.net.wifi.p2p.WifiP2pManager.ActionListener;
@@ -31,7 +33,8 @@ public class WDCCServiceManager {
 	private WDCCP2PManager mManager;
 	static final int SERVER_PORT = 4545;
 	private Channel mChannel;
-	private WifiP2pDnsSdServiceRequest serviceRequest;
+	private WifiP2pDnsSdServiceRequest mServiceRequest;
+	private WifiP2pDnsSdServiceInfo mServiceInfo = null;
 	private boolean ret = false;
 	static int numberServiceAdded =0;
 	static int numberdiscoverer =0;
@@ -42,7 +45,7 @@ public class WDCCServiceManager {
 	 * @return the serviceRequest
 	 */
 	public WifiP2pDnsSdServiceRequest getServiceRequest() {
-		return serviceRequest;
+		return mServiceRequest;
 	}
 
 	public WDCCServiceManager(Channel channel,
@@ -59,12 +62,12 @@ public class WDCCServiceManager {
 		Map<String, String> record = new HashMap<String, String>();
 		record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
-		WifiP2pDnsSdServiceInfo service = WifiP2pDnsSdServiceInfo.newInstance(
+		/*WifiP2pDnsSdServiceInfo*/ mServiceInfo = WifiP2pDnsSdServiceInfo.newInstance(
 				SERVICE_INSTANCE, SERVICE_REG_TYPE, record);
 		++numberServiceAdded;
 		Log.d(TAG, "adding LocalService " + numberServiceAdded);
 
-		mAndroidP2Pmanager.addLocalService(mChannel, service,
+		mAndroidP2Pmanager.addLocalService(mChannel, mServiceInfo,
 				new ActionListener() {
 
 					@Override
@@ -86,12 +89,11 @@ public class WDCCServiceManager {
 
 	private void discoverService() {
 		++numberdiscoverer;
-		/*
-		 * Register listeners for DNS-SD services. These are callbacks invoked
+		/**
+		 * <blockquote>>Register listeners for DNS-SD services. These are callbacks invoked
 		 * by the system when a service is actually discovered.
 		 */
 		Log.d(TAG, "In discoverService numberdiscoverer =" + numberdiscoverer);
-
 		mAndroidP2Pmanager.setDnsSdResponseListeners(mChannel,
 				new DnsSdServiceResponseListener() {
 
@@ -110,7 +112,7 @@ public class WDCCServiceManager {
 									+ instanceName);
 							Log.d(TAG, "onDnsSdServiceAvailable---1");
 
-							mManager.notifyServicesChanged(service, true);
+							mManager.notifyServicesChanged(service, serviceOperation.ADD_SERVICE);
 
 							Log.d(TAG, "onDnsSdServiceAvailable --2");
 
@@ -136,21 +138,19 @@ public class WDCCServiceManager {
 
 		// After attaching listeners, create a service request and initiate
 		// discovery.
-		serviceRequest = WifiP2pDnsSdServiceRequest.newInstance();
-		mAndroidP2Pmanager.addServiceRequest(mChannel, serviceRequest,
+		mServiceRequest = WifiP2pDnsSdServiceRequest.newInstance();
+		mAndroidP2Pmanager.addServiceRequest(mChannel, mServiceRequest,
 				new ActionListener() {
 
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "addServiceRequest onSuccess");
-						// appendStatus("Added service discovery request");
 					}
 
 					@Override
 					public void onFailure(int error) {
 						Log.d(TAG, "addServiceRequest onFailure error = "
 								+ error);
-						// appendStatus("Failed adding service discovery request");
 					}
 				});
 		mAndroidP2Pmanager.discoverServices(mChannel, new ActionListener() {
@@ -158,36 +158,65 @@ public class WDCCServiceManager {
 			@Override
 			public void onSuccess() {
 				Log.d(TAG, "Service discovery initiated sucessfully");
-				// appendStatus("Service discovery initiated");
 			}
 
 			@Override
 			public void onFailure(int error) {
 				Log.d(TAG, "Service discovery initiation failed error = " + error);
-				// appendStatus("Service discovery failed");
 
 			}
 		});
 	}
+	/**
+	 */
+	public void startServiceDiscovery() {
+		discoverService();
+	}
 
-	public boolean removeService() {
+	boolean stopServiceDiscovery() {
+		Log.d(TAG, "stopServiceDiscovery");
+		mAndroidP2Pmanager.removeServiceRequest(mChannel, mServiceRequest,new ActionListener() {
+
+			@Override
+			public void onSuccess() {
+				Log.d(TAG, "removeServiceRequest onSuccess");
+				ret = true;
+			}
+
+			@Override
+			public void onFailure(int arg0) {
+				Log.d(TAG, "removeServiceRequest onFailure");
+				ret = false;
+			}
+		});
+
+		return ret;
+	}
+	 boolean removeService() {
 		Log.d(TAG, "Removing the advertised service");
-		mAndroidP2Pmanager.removeServiceRequest(mChannel, serviceRequest,
+		mAndroidP2Pmanager.removeLocalService(mChannel, mServiceInfo,
 				new ActionListener() {
 
 					@Override
 					public void onSuccess() {
-						Log.d(TAG, "removeService onSuccess");
+						Log.d(TAG, "removeLocalService onSuccess");
 						ret = true;
 					}
 
 					@Override
 					public void onFailure(int arg0) {
-						Log.d(TAG, "removeService onFailure");
+						Log.d(TAG, "removeLocalService onFailure");
 						ret = false;
 					}
 				});
 		return ret;
 	}
+	 public boolean removeAndStopServiceDisc(){
+		 boolean ret =stopServiceDiscovery();
+		 ret = ret && removeService();
+		 return ret;
+		 
+	 }
 
+	
 }

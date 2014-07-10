@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.manager.cago.WDCCP2PManager;
 import com.manager.cago.WDCCP2PService;
+import com.manager.cago.WDCCP2PService.serviceOperation;
 
 /**
  * A ListFragment that displays available mServiceDeviceList on discovery and
@@ -63,10 +64,7 @@ public class WDCCList_Fragment extends ListFragment implements
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
 		mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
-				R.layout./*peerlist*/row_devices, mServiceDeviceList);
-		 /* android.R.layout.simple_list_item_2, android.R.id.text1*/
-		 /* mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
-				  android.R.layout.simple_list_item_2, mServiceDeviceList);*/
+				R.layout.row_devices, mServiceDeviceList);
 		this.setListAdapter(mPeerListAdapter);
 
 		if (savedInstanceState == null) {
@@ -96,6 +94,7 @@ public class WDCCList_Fragment extends ListFragment implements
 		Log.d(TAG, "onResume");
 		mManager.registerDevListListener(this);
 		mServiceDeviceList.clear();
+		Log.d(TAG, "ServiceList Size = " + mManager.getServiceList().size());
 		mServiceDeviceList.addAll(mManager.getServiceList());
 		mPeerListAdapter.notifyDataSetChanged();
 		super.onStop();
@@ -104,7 +103,7 @@ public class WDCCList_Fragment extends ListFragment implements
 	@Override
 	public void onStop() {
 		Log.d(TAG, "onStop");
-
+		mManager.deregisterDevListListener();
 		super.onStop();
 	}
 
@@ -142,10 +141,7 @@ public class WDCCList_Fragment extends ListFragment implements
 		Log.d(TAG,"----------onListItemClick----------------");
 		WDCCP2PService service = (WDCCP2PService) getListAdapter().getItem(position);
 		mManager.connectP2p(service);
-		/*WifiP2pDevice device = (WifiP2pDevice) getListAdapter().getItem(
-				position);
-		((DeviceActionListener) getActivity()).showDetails(device);*/
-	}
+		}
 
 	/**
 	 * Array adapter for ListFragment that maintains WifiP2pDevice list.
@@ -166,7 +162,7 @@ public class WDCCList_Fragment extends ListFragment implements
 			Log.d(TAG, "WiFiPeerListAdapter");
 
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Log.d(TAG, "getView");
@@ -174,13 +170,12 @@ public class WDCCList_Fragment extends ListFragment implements
 			if (v == null) {
 				LayoutInflater vi = (LayoutInflater) getActivity()
 						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				//v = vi.inflate(R.layout.peerlist, null);
-				v = vi.inflate(R.layout.row_devices, null);
+				v = vi.inflate(R.layout.peerlist, null);
 			}
 			WDCCP2PService service = mServiceDeviceList.get(position);// items.get(position);
 			WifiP2pDevice device = service.device;
 			if (device != null) {
-				TextView top = (TextView) v.findViewById(R.id.device_name/*txt*/);
+				TextView top = (TextView) v.findViewById(R.id.txt);
 				if (top != null) {
 					top.setText(device.deviceName);
 				}
@@ -198,13 +193,13 @@ public class WDCCList_Fragment extends ListFragment implements
 	 * @param device
 	 *            WifiP2pDevice object
 	 */
-	public void updateThisDevice(WifiP2pDevice device) {
+	/*public void updateThisDevice(WifiP2pDevice device) {
 		this.device = device;
 		TextView view = (TextView) mContentView.findViewById(R.id.my_name);
 		view.setText(device.deviceName);
 		view = (TextView) mContentView.findViewById(R.id.my_status);
 		view.setText(getDeviceStatus(device.status));
-	}
+	}*/
 
 	public void clearPeers() {
 		mServiceDeviceList.clear();
@@ -252,21 +247,42 @@ public class WDCCList_Fragment extends ListFragment implements
 	 * .cago.WDCCP2PService, boolean)
 	 */
 	@Override
-	public void notifyServicesChanged(WDCCP2PService service, boolean add) {
+	public void notifyServicesChanged(WDCCP2PService service, int operation) {
 		Log.d(TAG, "notifyDeviceList");
 		if (mPeerListAdapter == null) {
 			Log.d(TAG, "mPeerListAdapter IS NULL");
 			return;
 
+		} 
+		switch (operation) {
+		case serviceOperation.ADD_SERVICE:
+			mPeerListAdapter.add(service);
+			break;
+		case serviceOperation.UPDATE_SERIVICE:
+			mServiceDeviceList.clear();
+			mServiceDeviceList.addAll(mManager.getServiceList());
+			break;
+		case serviceOperation.REMOVE_SERIVICE:
+			mPeerListAdapter.remove(service);
+			break;
+		default:
+			break;
+		}
+		mPeerListAdapter.notifyDataSetChanged();
+
+	/*	if (mPeerListAdapter == null) {
+			Log.d(TAG, "mPeerListAdapter IS NULL");
+			return;
+
 		} else {
-			if (add)
+			if (operation== serviceOperation.ADD_SERVICE)
 				mPeerListAdapter.add(service);
 			else
 				mPeerListAdapter.remove(service);
 
 			mPeerListAdapter.notifyDataSetChanged();
 
-		}
+		}*/
 
 	}
 

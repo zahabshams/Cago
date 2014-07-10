@@ -28,29 +28,27 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.viewer.cagochat.WDCCScanningActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
+            android:name="com.viewer.cagochat.WDCCScanningActivity"  
+            android:configChanges="orientation|screenSize"
+         >
+                   <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.viewer.cagochat.ListLayout"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
             android:name="com.viewer.cagochat.WDCCDevice_ListActivity"
-            android:label="@string/app_name" >
+            android:configChanges="orientation|screenSize"
+            >
         </activity>
         <activity
             android:name="com.viewer.cagochat.ChatTest"
-            android:label="@string/title_activity_chat_test" >
+            >
         </activity>
         <activity
             android:name="com.viewer.cagochat.ChatActivity_Test"
-            android:label="@string/title_activity_chat" >
+        >
         </activity>
     </application>
 

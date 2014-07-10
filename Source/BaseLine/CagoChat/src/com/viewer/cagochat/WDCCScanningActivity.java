@@ -1,18 +1,22 @@
 package com.viewer.cagochat;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.manager.cago.WDCCP2PManager;
 import com.manager.cago.WDCCP2PService;
@@ -20,29 +24,29 @@ import com.manager.cago.WDCCP2PService;
 public class WDCCScanningActivity extends ActionBarActivity {
 	protected static final String TAG = WDCCScanningActivity.class
 			.getSimpleName();
-
-	public static final int MESSAGE_READ = 0x400 + 1;
-	public static final int MY_HANDLE = 0x400 + 2;
-	public Button mbtnStartAnotherActivity;
 	public Context mContext = null;
 	private WDCCP2PManager mManager;
+	private static ProgressBar progressBar;
+	private static Button scanButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-	/*	mContext = getApplicationContext();
-
-		WDCCP2PManager.iInstantiateManager(mContext);*/
 		mManager = WDCCP2PManager.getWDCCP2PManager();
 		mContext = mManager.getappContext();
 		setContentView(R.layout.activity_main);
-
 		if (savedInstanceState == null) {
 
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new WDCCScanningFragment()).commit();
 		}
-
+		// Adds images to action bar
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setDisplayShowCustomEnabled(true);
+		LayoutInflater inflator = (LayoutInflater) this
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = inflator.inflate(R.layout.actionbarlayout, null);
+		actionBar.setCustomView(v);
 	}
 
 	@Override
@@ -50,13 +54,11 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		super.onResume();
 		mManager = WDCCP2PManager.getWDCCP2PManager();
 		mManager.registerBroadCastReceiver();
-
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		//mManager.deregisterBroadCastReceiver();
 
 	}
 
@@ -68,17 +70,14 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	/*
+	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
+	 * action bar item clicks here. The action bar will // automatically handle
+	 * clicks on the Home/Up button, so long // as you specify a parent activity
+	 * in AndroidManifest.xml. int id = item.getItemId(); if (id ==
+	 * R.id.action_settings) { return true; } return
+	 * super.onOptionsItemSelected(item); }
+	 */
 
 	/**
 	 * A placeholder fragment containing a simple view.
@@ -88,19 +87,30 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		protected static final String TAG = WDCCScanningFragment.class
 				.getSimpleName();
 		private WDCCP2PManager mManager = null;
+		private CountDownTimer mCTimer;
+		private int mScanTimeout = 60 * 1000;
+		private AlertDialog mdialog = null;
+		private WDCCScanningFragment mScanningFrag;
 
 		@Override
 		public void onPause() {
 			Log.d(TAG, "onPause(");
-			// TODO Auto-generated method stub
-			super.onStop();
+			super.onPause();
 		}
 
 		@Override
 		public void onStop() {
 			Log.d(TAG, "onStop(");
-			// TODO Auto-generated method stub
+			mCTimer.cancel();
 			super.onStop();
+		}
+
+		@Override
+		public void onResume() {
+			Log.d(TAG, "onResume(");
+			mScanningFrag = this;
+			mManager.registerDevListListener(mScanningFrag);
+			super.onResume();
 		}
 
 		public WDCCScanningFragment() {
@@ -113,6 +123,17 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				Intent intent = new Intent(getActivity(),
 						WDCCDevice_ListActivity.class);
 				startActivity(intent);
+			}
+		};
+		OnClickListener scanning = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				progressBar.setVisibility(0);// display progress bar
+				scanButton.setEnabled(false);
+				mCTimer.start();
+				mManager.registerDevListListener(mScanningFrag);
+				mManager.startServiceDiscovery();
 
 			}
 		};
@@ -122,10 +143,22 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			mManager = WDCCP2PManager.getWDCCP2PManager();
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
-			Button button = (Button) rootView
+			mdialog = new AlertDialog.Builder(getActivity()).create();
+			progressBar = (ProgressBar) rootView.findViewById(R.id.progressbar);
+			scanButton = (Button) rootView.findViewById(R.id.btnScanning);
+			scanButton.setEnabled(false);
+			Button btnBrowse = (Button) rootView
 					.findViewById(R.id.btnStartAnotherActivity);
-			button.setOnClickListener(browse);
+			btnBrowse.setVisibility(8);
+			btnBrowse.setOnClickListener(browse);
+
+			scanButton.setOnClickListener(scanning);
 			mManager.registerDevListListener(this);
+			Log.d(TAG, "Starting ----------------TimerControl------------------1");
+			TimerControl();
+			Log.d(TAG, "Starting ----------------TimerControl------------------2");
+			mCTimer.start();
+
 			return rootView;
 		}
 
@@ -137,13 +170,65 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		 * .manager.cago.WDCCP2PService, boolean)
 		 */
 		@Override
-		public void notifyServicesChanged(WDCCP2PService service, boolean add) {
+		public void notifyServicesChanged(WDCCP2PService service, int operation) {
 			Log.d(TAG, "notifyServicesChanged");
+			// singleTask.cancel();
 			mManager.deregisterDevListListener();
 			Intent intent = new Intent(getActivity(),
 					WDCCDevice_ListActivity.class);
 			startActivity(intent);
+			mCTimer.cancel();
+			mManager.stopServiceDiscovery();
+
+		}
+
+		void TimerControl() {
+			mCTimer = new CountDownTimer(mScanTimeout, 1000) {
+
+				public void onTick(long millisUntilFinished) {
+				}
+
+				public void onFinish() {
+					Log.d(TAG, "---------------timer onFinish()--------------------------");
+					progressBar.setVisibility(8);
+
+					mdialog.setCancelable(false);
+					mdialog.setMessage("Do you want to restart scanning?");
+					mManager.deregisterDevListListener();
+					mManager.removeAndStopServiceDisc();
+					// identifier is negative
+					mdialog.setButton(DialogInterface.BUTTON_NEGATIVE, "NO",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Add your code for the button here.
+									scanButton.setEnabled(true);
+									progressBar.setVisibility(8);// removes
+																	// progress
+																	// bar
+									mManager.deregisterDevListListener();
+									mManager.stopServiceDiscovery();
+								}
+							});
+					mdialog.setButton(DialogInterface.BUTTON_POSITIVE, "YES",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int which) {
+									progressBar.setVisibility(0); // display
+																	// progress
+																	// bar
+									scanButton.setEnabled(false);
+									mCTimer.start();
+									mManager.registerDevListListener(mScanningFrag);
+									mManager.startServiceDiscovery();
+								}
+							});
+					mdialog.show();
+
+				}
+			};/* .start(); */
 
 		}
 	}
+
 }

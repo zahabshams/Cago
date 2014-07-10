@@ -5,18 +5,17 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"  
   >  
-  
-   <Button
+     <ImageView
         android:id="@+id/imagebtn"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
+	    android:contentDescription="@string/content"
 	    android:layout_marginLeft="20dp"
 	    android:layout_marginRight="20dp"	     
 	    android:layout_marginTop="20dp"    
-	    android:onClick="open"  
 	    android:background="@drawable/buttonshape"   
-	    android:drawableLeft="@drawable/cartoongirlnew"
-	/>
+	    android:src="@drawable/cartoongirlnew"
+	/> 
    
     <TextView
         android:id="@+id/txt"

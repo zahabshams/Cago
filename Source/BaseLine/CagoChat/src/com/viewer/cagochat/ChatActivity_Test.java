@@ -4,9 +4,11 @@ import com.manager.cago.WDCCChatMgr;
 import com.manager.cago.WDCCP2PManager;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+/**
+ * 
+ * @author zahab
+ *<blockquote>
+ *This activity handles the chat messages coming from ChatManager
+ */
 public class ChatActivity_Test extends ActionBarActivity implements
 		Handler.Callback {
 	public static final int MESSAGE_READ = 0x400 + 1;
@@ -35,13 +42,20 @@ public class ChatActivity_Test extends ActionBarActivity implements
 					.add(R.id.container, chatFragment /* new WiFiChatFragment() */)
 					.commit();
 		}
+		ActionBar actionBar = getSupportActionBar();
+		
+		actionBar.setDisplayShowCustomEnabled(true);			
+
+		LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = inflator.inflate(R.layout.actionbarlayout, null);
+
+		actionBar.setCustomView(v);
 		mManager.setChatMsgHandler(m_Msg_handler);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.chat, menu);
 		return true;
 	}

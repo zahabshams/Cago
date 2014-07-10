@@ -47,11 +47,8 @@ public class WDCCGOSocketMgr extends Thread{
 	            throw e;
 	        }
 	}
-	
-	
 
-   
-    /**
+	/**
      * A ThreadPool for client sockets.
      */
     private final ThreadPoolExecutor pool = new ThreadPoolExecutor(

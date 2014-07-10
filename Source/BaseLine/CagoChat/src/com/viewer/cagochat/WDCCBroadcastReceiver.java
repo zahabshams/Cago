@@ -43,13 +43,6 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 		this.mManager = WDCCP2PManager.getWDCCP2PManager();
 		this.mAndroidP2PManager = p2pmanager;
 		mchannel = channel;
-		if(mchannel == null){
-			Log.d(TAG,"--------------------------mchannel is null----------------");
-		}
-		if(mManager == null){
-			Log.d(TAG,"--------------------------mManager is null----------------");
-		}
-/*		this.activity = activity;*/
 		this.mPeerListener = peerlistener;
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 		intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
@@ -70,7 +63,7 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Log.d(TAG, "onReceive" + action);
-
+		
 		if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
 			
@@ -83,10 +76,6 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 				Log.d(TAG, "networkInfo.isConnected()-----------------1" );
 				// we are connected with the other device, request connection
 				// info to find group owner IP
-				
-				//Log.d(TAG,"Connected to p2p network. Requesting network details" + mAndroidP2PManager + mchannel + mManager.getmConnectionMgr());
-				
-				
 				mAndroidP2PManager.requestConnectionInfo(mchannel,mManager.getConnectionMgr());
 			} else {
 				// It's a disconnect
@@ -95,7 +84,14 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 		} else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
 				.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
+			if(mchannel == null){
+				Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mchannel == null)");
 
+			}
+			if(mPeerListener == null){
+				Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mPeerListener == null)");
+
+			}
 			mAndroidP2PManager.requestPeers(mchannel, mPeerListener);
 			WifiP2pDevice device = (WifiP2pDevice) intent
 					.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_DEVICE);

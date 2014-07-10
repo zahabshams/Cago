@@ -41,7 +41,7 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 		WifiP2pManager mAndroidP2Pmanager = mManager.getAndroidP2Pmanager();
 		Channel channel = mManager.getP2PChannel();
 
-		mManager.removeService();
+		mManager.stopServiceDiscovery();
 		mAndroidP2Pmanager.connect(channel, config, new ActionListener() {
 
 			@Override

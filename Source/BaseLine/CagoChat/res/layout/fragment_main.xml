@@ -20,10 +20,13 @@
 	      android:text="@string/android_device"
 	      android:textSize="20sp"
 	    />
-	    <TextView android:id="@+id/scanning_view"
-	      android:layout_width="180dp"
-	      android:layout_height="180dp"
+	    <TextView android:id="@+id/scanning_view"	     
+		  android:layout_width="fill_parent"
+	      android:layout_height="fill_parent"
+	      android:layout_marginLeft="50dp"
+	      android:layout_marginRight="50dp"
 	      android:layout_marginTop="10dp"
+	      android:layout_marginBottom="160dp"
 	      android:layout_centerHorizontal="true"	      
 	      android:layout_below="@+id/android_view"	     
 	      android:background="@drawable/scanningviewshape"
@@ -31,6 +34,16 @@
 	      android:text="@string/scanning"
 	      android:textSize="25sp"
 	    />	
+    	  <ProgressBar
+	    	android:id="@+id/progressbar"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+         	android:layout_above="@+id/imagecartoongirl"
+         	android:layout_marginBottom="15dp"
+            android:layout_centerHorizontal="true"             
+            android:background="@drawable/progressbackground"
+            android:indeterminateDrawable="@drawable/customprogressbar"                              
+            />
 	    
 		  <ImageView
 		    android:id="@+id/imagecartoongirl"
@@ -38,17 +51,23 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentBottom="true"	
-	        android:src="@drawable/machine"/>
-	        
+	        android:src="@drawable/cutecartoon"
+	        />	        
 	  
 		   <Button
 		      android:id="@+id/btnStartAnotherActivity"
 		      android:layout_width="wrap_content"
 		      android:layout_height="wrap_content"
-		      android:layout_centerHorizontal="true"
+		      android:layout_alignParentRight="true"
 		      android:layout_alignParentBottom="true"
 		      android:background="#ff0000"
-		      android:onClick="open"
-		      android:text="@string/browse" />
+		      android:text="@string/browsebtn" />
+		    <Button
+		      android:id="@+id/btnScanning"
+		      android:layout_width="wrap_content"
+		      android:layout_height="50dp"	
+		      android:layout_centerHorizontal="true"
+		      android:layout_alignParentBottom="true"	 
+		      android:text="@string/scanningbtn" />
 	 	</RelativeLayout> 	    
 </RelativeLayout>

@@ -68,8 +68,11 @@ public abstract class WDCCViewerManager {
 		// TODO Auto-generated constructor stub
 	}
 
+	public void getChatMgr(){
+		
+	}
 	public interface DevList {
-		public void notifyServicesChanged(WDCCP2PService service, boolean add);
+		public void notifyServicesChanged(WDCCP2PService service, int operation);
 	}
 
 	public interface ChatActivity {

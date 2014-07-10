@@ -1,4 +1,3 @@
-
 package com.viewer.cagochat;
 
 import android.app.Fragment;
@@ -25,93 +24,95 @@ import com.manager.cago.WDCCP2PManager;
  */
 public class WiFiChatFragment extends Fragment {
 
-    private static final String TAG = "WiFiChatFragment";
+	private static final String TAG = "WiFiChatFragment";
 	private View view;
-    private WDCCChatMgr chatManager;
-    private TextView chatLine;
-    private ListView listView;
-    ChatMessageAdapter adapter = null;
-    private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
-    private List<String> items = new ArrayList<String>();
+	private WDCCChatMgr chatManager;
+	private TextView chatLine;
+	private ListView listView;
+	ChatMessageAdapter adapter = null;
+	private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
+	private List<String> items = new ArrayList<String>();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-    	Log.d(TAG,"onCreateView");
-        view = inflater.inflate(R.layout.fragment_chat, container, false);
-        chatLine = (TextView) view.findViewById(R.id.txtChatLine);
-        listView = (ListView) view.findViewById(android.R.id.list);
-        adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
-                items);
-        listView.setAdapter(adapter);
-        view.findViewById(R.id.button1).setOnClickListener(
-                new View.OnClickListener() {
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		Log.d(TAG, "onCreateView");
+		view = inflater.inflate(R.layout.fragment_chat, container, false);
+		chatLine = (TextView) view.findViewById(R.id.txtChatLine);
+		listView = (ListView) view.findViewById(android.R.id.list);
+		adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
+				items);
+		listView.setAdapter(adapter);
+		view.findViewById(R.id.button1).setOnClickListener(
+				new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View arg0) {
-                        if (chatManager != null) {
-                            chatManager.write(chatLine.getText().toString()
-                                    .getBytes());
-                            pushMessage("Me: " + chatLine.getText().toString());
-                            chatLine.setText("");
-                            chatLine.clearFocus();
-                        }
-                    }
-                });
-    	chatManager = mManager.getChatMgr();
-        return view;
-    }
+					@Override
+					public void onClick(View arg0) {
+						if (chatManager != null) {
+							chatManager.write(chatLine.getText().toString()
+									.getBytes());
+							pushMessage("Me: " + chatLine.getText().toString());
+							chatLine.setText("");
+							chatLine.clearFocus();
+						}
+					}
+				});
+		chatManager = mManager.getChatMgr();
+		mManager.stopServiceDiscovery();
 
-    public interface MessageTarget {
-        public Handler getHandler();
-    }
+		return view;
+	}
 
-    public void setChatManager(WDCCChatMgr obj) {
-        chatManager = obj;
-    }
+	public interface MessageTarget {
+		public Handler getHandler();
+	}
 
-    public void pushMessage(String readMessage) {
-        adapter.add(readMessage);
-        adapter.notifyDataSetChanged();
-    }
+	public void setChatManager(WDCCChatMgr obj) {
+		chatManager = obj;
+	}
 
-    /**
-     * ArrayAdapter to manage chat messages.
-     */
-    public class ChatMessageAdapter extends ArrayAdapter<String> {
+	public void pushMessage(String readMessage) {
+		adapter.add(readMessage);
+		adapter.notifyDataSetChanged();
+	}
 
-        List<String> messages = null;
+	/**
+	 * ArrayAdapter to manage chat messages.
+	 */
+	public class ChatMessageAdapter extends ArrayAdapter<String> {
 
-        public ChatMessageAdapter(Context context, int textViewResourceId,
-                List<String> items) {
-            super(context, textViewResourceId, items);
-        }
+		List<String> messages = null;
 
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater) getActivity()
-                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(android.R.layout.simple_list_item_1, null);
-            }
-            String message = items.get(position);
-            if (message != null && !message.isEmpty()) {
-                TextView nameText = (TextView) v
-                        .findViewById(android.R.id.text1);
+		public ChatMessageAdapter(Context context, int textViewResourceId,
+				List<String> items) {
+			super(context, textViewResourceId, items);
+		}
 
-                if (nameText != null) {
-                    nameText.setText(message);
-                    if (message.startsWith("Me: ")) {
-                        nameText.setTextAppearance(getActivity(),
-                                R.style.normalText);
-                    } else {
-                        nameText.setTextAppearance(getActivity(),
-                                R.style.boldText);
-                    }
-                }
-            }
-            return v;
-        }
-    }
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View v = convertView;
+			if (v == null) {
+				LayoutInflater vi = (LayoutInflater) getActivity()
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				v = vi.inflate(android.R.layout.simple_list_item_1, null);
+			}
+			String message = items.get(position);
+			if (message != null && !message.isEmpty()) {
+				TextView nameText = (TextView) v
+						.findViewById(android.R.id.text1);
+
+				if (nameText != null) {
+					nameText.setText(message);
+					if (message.startsWith("Me: ")) {
+						nameText.setTextAppearance(getActivity(),
+								R.style.normalText);
+					} else {
+						nameText.setTextAppearance(getActivity(),
+								R.style.boldText);
+					}
+				}
+			}
+			return v;
+		}
+	}
 }
