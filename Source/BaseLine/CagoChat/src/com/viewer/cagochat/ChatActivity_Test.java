@@ -11,6 +11,7 @@ import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,6 +43,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 					.add(R.id.container, chatFragment /* new WiFiChatFragment() */)
 					.commit();
 		}
+		//Adds images to the action bar
 		ActionBar actionBar = getSupportActionBar();
 		
 		actionBar.setDisplayShowCustomEnabled(true);			
@@ -72,9 +74,9 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
+/*	*//**
 	 * A placeholder fragment containing a simple view.
-	 */
+	 *//*
 	public static class PlaceholderFragment extends Fragment {
 
 		public PlaceholderFragment() {
@@ -89,7 +91,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 			return rootView;
 		}
 	}
-
+*/
 	public Handler getChatMsgHandler() {
 		return m_Msg_handler;
 	}
@@ -122,5 +124,17 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		}
 		return true;
 	}
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onKeyUp(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
+			mManager.closeDownChat();
+			finish();
+		//	getActivity().finish();
 
+		}
+		return super.onKeyUp(keyCode, event);
+	}
 }

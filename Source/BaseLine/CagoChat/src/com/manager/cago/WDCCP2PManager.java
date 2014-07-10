@@ -9,6 +9,7 @@ package com.manager.cago;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -21,6 +22,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.manager.cago.WDCCP2PService.serviceOperation;
+import com.manager.cago.listeners.SessionListenerImp;
+import com.manager.cago.listeners.SessionListeners;
 import com.viewer.cagochat.ChatActivity_Test;
 import com.viewer.cagochat.WDCCBroadcastReceiver;
 import com.viewer.cagochat.WDCCDevice_ListActivity;
@@ -38,6 +41,7 @@ public class WDCCP2PManager {
 	public WDCCBroadcastReceiver mP2PBroadcastReceiver = null;
 	private WifiP2pManager mAndroidP2Pmanager = null;
 	public Context mContext = null;
+	private LinkedList<SessionListenerImp> mSessionlistenerList= new LinkedList<SessionListenerImp>();
 	/**
 	 * <blockquote>
 	 * the synchronised to hold the P2P devices with specified service.
@@ -54,18 +58,19 @@ public class WDCCP2PManager {
 	protected WDCCP2PManager(Context context) {
 		Log.d(TAG, "WDCCP2PManager created");
 		mContext = context;
+	}
+
+	public void setupP2P(){
 		run = new Runnable() {
 
 			@Override
 			public void run() {
 				initialise();
-
 			}
 		};
 		Thread thread = new Thread(run);
-		thread.start();
+		thread.start();		
 	}
-
 	/**
 	 * @return the mConnectionMgr
 	 */
@@ -79,6 +84,8 @@ public class WDCCP2PManager {
 	 * @return the mManager
 	 */
 	private static WDCCP2PManager getmManager() {
+		Log.d(TAG,"Test="+mManager);
+	//	mManager = WDCCP2PManager.iInstantiateManager(this);
 		return mManager;
 	}
 
@@ -185,6 +192,7 @@ public class WDCCP2PManager {
 		mAndroidP2Pmanager = (WifiP2pManager) mContext
 				.getSystemService(Context.WIFI_P2P_SERVICE);
 		// zahab need to work on third argument of initialize which is null now.
+		
 		mChannel = mAndroidP2Pmanager.initialize(mContext,
 				mContext.getMainLooper(), null);
 		mConnectionMgr = new WDCCConnectionMgr();
@@ -275,7 +283,7 @@ public class WDCCP2PManager {
 	public void registerDevListListener(
 			WDCCViewerManager.DevList devListListener) {
 		Log.d(TAG, "registerDevListListener");
-		mDevListListener = null;
+	//	mDevListListener = null;
 		mDevListListener = devListListener;
 	}
 
@@ -291,6 +299,14 @@ public class WDCCP2PManager {
 
 	}
 
+	public void closeDownChat() {
+		removeAndStopServiceDisc();
+		mAndroidP2Pmanager.requestConnectionInfo(mChannel, null);
+		mAndroidP2Pmanager.removeGroup(mChannel, null);	
+	}
+	public void removeGroup(){
+		mAndroidP2Pmanager.removeGroup(mChannel, null);	
+	}
 	public boolean stopServiceDiscovery() {
 		return mServiceManager.stopServiceDiscovery();
 	}
@@ -303,5 +319,36 @@ public class WDCCP2PManager {
 	public void connectP2p(WDCCP2PService service) {
 		mConnectionMgr.connectP2p(service);
 	}
+	
+	public void registerSessionListener(SessionListenerImp listener){
 
+        Log.i(TAG, "registerMirrorLinkSessionListner("+(listener==null?"null":"")+")");
+        if(listener == null) {
+            return;
+        }
+        
+        synchronized (mSessionlistenerList) {
+			if (mSessionlistenerList.contains(listener)) {
+				Log.w(TAG, "MirrorLinkSessionListner already known");
+				return;
+			}
+			mSessionlistenerList.add(listener);
+        }
+    
+		mSessionlistenerList.add(listener);
+	}
+	public void deregisterSessionListener(SessionListenerImp listener){
+
+        Log.i(TAG, "deregisterSessionListener("+(listener==null?"null":"")+")");
+        if(listener == null) {
+            return;
+        }
+
+		synchronized (mSessionlistenerList) {
+			if (!mSessionlistenerList.remove(listener)) {
+				Log.w(TAG, "SessionListner not known");
+			}
+		}
+    
+	}
 }

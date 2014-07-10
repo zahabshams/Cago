@@ -63,8 +63,9 @@ public class WDCCList_Fragment extends ListFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
-		mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
-				R.layout.row_devices, mServiceDeviceList);
+		/*mPeerListAdapter = new WiFiPeerListAdapter(getActivity(),
+				R.layout.row_devices, mServiceDeviceList);*/
+		mPeerListAdapter = new WiFiPeerListAdapter(getActivity(), mServiceDeviceList);
 		this.setListAdapter(mPeerListAdapter);
 
 		if (savedInstanceState == null) {
@@ -155,9 +156,16 @@ public class WDCCList_Fragment extends ListFragment implements
 		 * @param textViewResourceId
 		 * @param objects
 		 */
-		public WiFiPeerListAdapter(Context context, int textViewResourceId,
+	/*	public WiFiPeerListAdapter(Context context, int textViewResourceId,
 				List<WDCCP2PService> objects) {
 			super(context, textViewResourceId, objects);
+			// items = mServiceDeviceList;
+			Log.d(TAG, "WiFiPeerListAdapter");
+
+		}*/
+		public WiFiPeerListAdapter(Context context,
+				List<WDCCP2PService> objects) {
+			super(context,R.layout.peerlist, objects);
 			// items = mServiceDeviceList;
 			Log.d(TAG, "WiFiPeerListAdapter");
 

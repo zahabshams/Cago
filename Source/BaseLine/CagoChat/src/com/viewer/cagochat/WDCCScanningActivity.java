@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -20,19 +21,20 @@ import android.widget.ProgressBar;
 
 import com.manager.cago.WDCCP2PManager;
 import com.manager.cago.WDCCP2PService;
+import com.manager.cago.listeners.SessionListenerImp;
 
 public class WDCCScanningActivity extends ActionBarActivity {
 	protected static final String TAG = WDCCScanningActivity.class
 			.getSimpleName();
 	public Context mContext = null;
 	private WDCCP2PManager mManager;
-	private static ProgressBar progressBar;
-	private static Button scanButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.d("MyTest","in scanning activity");
 		mManager = WDCCP2PManager.getWDCCP2PManager();
+		mManager.setupP2P();
 		mContext = mManager.getappContext();
 		setContentView(R.layout.activity_main);
 		if (savedInstanceState == null) {
@@ -58,8 +60,26 @@ public class WDCCScanningActivity extends ActionBarActivity {
 
 	@Override
 	public void onPause() {
+		Log.d(TAG, "onActivityPause(");
 		super.onPause();
 
+	}
+	@Override
+	public boolean onKeyUp(int keycode, KeyEvent event){
+		if(keycode == KeyEvent.KEYCODE_BACK 
+				||keycode == KeyEvent.KEYCODE_HOME){
+            mManager.closeDownChat();
+			finish();
+			
+		}
+		return super.onKeyDown(keycode, event);
+	
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.d(TAG, "onActivityDestroy(");
+		super.onDestroy();
 	}
 
 	@Override
@@ -91,7 +111,44 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		private int mScanTimeout = 60 * 1000;
 		private AlertDialog mdialog = null;
 		private WDCCScanningFragment mScanningFrag;
+		private ProgressBar progressbar1;
+		private ProgressBar progressbar2;
+		private Button scanButton;
+		private SessionListenerImp mSessionlistener = new SessionListenerImp(){
+			@Override
+			public void onChatFinish() {
+				
+			};
+			
+			@Override
+			public void onChatStart() {
+				getActivity().finish();
+			};
+		};
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			mManager = WDCCP2PManager.getWDCCP2PManager();
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+					false);
+			mdialog = new AlertDialog.Builder(getActivity()).create();
+			progressbar1 = (ProgressBar) rootView
+					.findViewById(R.id.progressbarmoving);
+			progressbar2 = (ProgressBar) rootView
+					.findViewById(R.id.progressbarstop);
+			scanButton = (Button) rootView.findViewById(R.id.btnScanning);
+			scanButton.setEnabled(false);
+			Button btnBrowse = (Button) rootView
+					.findViewById(R.id.btnStartAnotherActivity);
+			// btnBrowse.setVisibility(8);
+			btnBrowse.setOnClickListener(browse);
 
+			scanButton.setOnClickListener(scanning);
+			mManager.registerDevListListener(this);
+			mManager.registerSessionListener(mSessionlistener);
+			TimerControl();
+			mCTimer.start();
+			return rootView;
+		}
 		@Override
 		public void onPause() {
 			Log.d(TAG, "onPause(");
@@ -101,18 +158,27 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		@Override
 		public void onStop() {
 			Log.d(TAG, "onStop(");
-			mCTimer.cancel();
+			// mCTimer.cancel();
 			super.onStop();
 		}
-
+		
 		@Override
 		public void onResume() {
 			Log.d(TAG, "onResume(");
 			mScanningFrag = this;
-			mManager.registerDevListListener(mScanningFrag);
+			mManager.registerDevListListener(this);
 			super.onResume();
 		}
 
+		@Override
+		public void onDestroy() {
+			Log.d(TAG, "onDestroy(");
+			mCTimer.cancel();
+			mManager.deregisterSessionListener(mSessionlistener);
+			super.onDestroy();
+		}
+		
+		
 		public WDCCScanningFragment() {
 		}
 
@@ -125,11 +191,17 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				startActivity(intent);
 			}
 		};
+		
+		private boolean handleKeyEvents(int keycode , KeyEvent event) {
+			return false;
+			
+		}
 		OnClickListener scanning = new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				progressBar.setVisibility(0);// display progress bar
+				progressbar2.setVisibility(8);// removes stop progress bar
+				progressbar1.setVisibility(0);// display moving progress bar
 				scanButton.setEnabled(false);
 				mCTimer.start();
 				mManager.registerDevListListener(mScanningFrag);
@@ -138,29 +210,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			}
 		};
 
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			mManager = WDCCP2PManager.getWDCCP2PManager();
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			mdialog = new AlertDialog.Builder(getActivity()).create();
-			progressBar = (ProgressBar) rootView.findViewById(R.id.progressbar);
-			scanButton = (Button) rootView.findViewById(R.id.btnScanning);
-			scanButton.setEnabled(false);
-			Button btnBrowse = (Button) rootView
-					.findViewById(R.id.btnStartAnotherActivity);
-			btnBrowse.setVisibility(8);
-			btnBrowse.setOnClickListener(browse);
-
-			scanButton.setOnClickListener(scanning);
-			mManager.registerDevListListener(this);
-			Log.d(TAG, "Starting ----------------TimerControl------------------1");
-			TimerControl();
-			Log.d(TAG, "Starting ----------------TimerControl------------------2");
-			mCTimer.start();
-
-			return rootView;
-		}
+	
 
 		/*
 		 * (non-Javadoc)
@@ -172,14 +222,15 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		@Override
 		public void notifyServicesChanged(WDCCP2PService service, int operation) {
 			Log.d(TAG, "notifyServicesChanged");
-			// singleTask.cancel();
 			mManager.deregisterDevListListener();
+			mCTimer.cancel();
 			Intent intent = new Intent(getActivity(),
 					WDCCDevice_ListActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 			startActivity(intent);
-			mCTimer.cancel();
-			mManager.stopServiceDiscovery();
-
+			getActivity().finish();
+/*			mManager.stopServiceDiscovery();
+*/			
 		}
 
 		void TimerControl() {
@@ -189,23 +240,21 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				}
 
 				public void onFinish() {
-					Log.d(TAG, "---------------timer onFinish()--------------------------");
-					progressBar.setVisibility(8);
-
+					Log.d(TAG,
+							"---------------timer onFinish()--------------------------");
+					progressbar1.setVisibility(8);// removes moving progress bar
+					progressbar2.setVisibility(0);// display stop progress bar
 					mdialog.setCancelable(false);
 					mdialog.setMessage("Do you want to restart scanning?");
 					mManager.deregisterDevListListener();
 					mManager.removeAndStopServiceDisc();
-					// identifier is negative
+
 					mdialog.setButton(DialogInterface.BUTTON_NEGATIVE, "NO",
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int which) {
 									// TODO Add your code for the button here.
 									scanButton.setEnabled(true);
-									progressBar.setVisibility(8);// removes
-																	// progress
-																	// bar
 									mManager.deregisterDevListListener();
 									mManager.stopServiceDiscovery();
 								}
@@ -214,10 +263,8 @@ public class WDCCScanningActivity extends ActionBarActivity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int which) {
-									progressBar.setVisibility(0); // display
-																	// progress
-																	// bar
-									scanButton.setEnabled(false);
+									progressbar2.setVisibility(8); // removes stop progress bar
+									progressbar1.setVisibility(0); // display  moving progress bar
 									mCTimer.start();
 									mManager.registerDevListListener(mScanningFrag);
 									mManager.startServiceDiscovery();
@@ -226,7 +273,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 					mdialog.show();
 
 				}
-			};/* .start(); */
+			};
 
 		}
 	}

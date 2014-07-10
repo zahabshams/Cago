@@ -40,6 +40,7 @@ public class WiFiChatFragment extends Fragment {
 		view = inflater.inflate(R.layout.fragment_chat, container, false);
 		chatLine = (TextView) view.findViewById(R.id.txtChatLine);
 		listView = (ListView) view.findViewById(android.R.id.list);
+	//	listView = (ListView) view.findViewById(R.id.list);
 		adapter = new ChatMessageAdapter(getActivity(), android.R.id.text1,
 				items);
 		listView.setAdapter(adapter);
@@ -56,6 +57,18 @@ public class WiFiChatFragment extends Fragment {
 							chatLine.clearFocus();
 						}
 					}
+				});
+		view.findViewById(R.id.btnend).setOnClickListener(
+				new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						mManager.closeDownChat();
+						//mManager.removeGroup();
+						getActivity().finish();
+							Log.d("TAG","You clicked on END button");
+						}
+					
 				});
 		chatManager = mManager.getChatMgr();
 		mManager.stopServiceDiscovery();

@@ -34,6 +34,7 @@ public class CagoChat extends Application {
 	@Override
 	public void onCreate() {
 		Log.d(TAG, "onCreate");
+		Log.d("MyTest","in cago chat");
 		mManager = WDCCP2PManager.iInstantiateManager(this);
 		super.onCreate();
 	}

@@ -1,13 +1,14 @@
 package com.viewer.cagochat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.manager.cago.WDCCP2PManager;
@@ -38,6 +39,7 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, mDevice_List_Fragment).commit();
+			Log.d(TAG,"Never Reached");
 		}
 		//Adds images to action bar
 		ActionBar actionBar = getSupportActionBar();
@@ -57,7 +59,16 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
+			mManager.closeDownChat();
+			finish();
+			Intent intent = new Intent(this, WDCCScanningActivity.class);
+			startActivity(intent);
+		}
+		return super.onKeyUp(keyCode, event);
+	}
 /*	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will

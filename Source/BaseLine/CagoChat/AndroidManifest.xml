@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -39,6 +39,7 @@
         </activity>
         <activity
             android:name="com.viewer.cagochat.WDCCDevice_ListActivity"
+            android:launchMode="singleTop"
             android:configChanges="orientation|screenSize"
             >
         </activity>
@@ -48,6 +49,8 @@
         </activity>
         <activity
             android:name="com.viewer.cagochat.ChatActivity_Test"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenSize"
         >
         </activity>
     </application>

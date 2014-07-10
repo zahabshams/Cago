@@ -77,6 +77,8 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 				// we are connected with the other device, request connection
 				// info to find group owner IP
 				mAndroidP2PManager.requestConnectionInfo(mchannel,mManager.getConnectionMgr());
+				
+				
 			} else {
 				// It's a disconnect
 			}

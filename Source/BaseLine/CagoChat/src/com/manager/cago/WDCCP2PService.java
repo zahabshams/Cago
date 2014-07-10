@@ -3,7 +3,6 @@
  */
 package com.manager.cago;
 
-import android.bluetooth.BluetoothClass.Device;
 import android.net.wifi.p2p.WifiP2pDevice;
 
 /**
