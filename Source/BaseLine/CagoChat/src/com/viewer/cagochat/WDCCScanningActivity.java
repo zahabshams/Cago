@@ -127,7 +127,9 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		};
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			Log.d(TAG,"WDCCScanningFragment  onCreateView");
 			mManager = WDCCP2PManager.getWDCCP2PManager();
+			mManager.registerDevListListener(this);
 			View rootView = inflater.inflate(R.layout.fragment_main, container,
 					false);
 			mdialog = new AlertDialog.Builder(getActivity()).create();
@@ -139,11 +141,10 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			scanButton.setEnabled(false);
 			Button btnBrowse = (Button) rootView
 					.findViewById(R.id.btnStartAnotherActivity);
-			// btnBrowse.setVisibility(8);
+			 btnBrowse.setVisibility(View.GONE);
 			btnBrowse.setOnClickListener(browse);
 
 			scanButton.setOnClickListener(scanning);
-			mManager.registerDevListListener(this);
 			mManager.registerSessionListener(mSessionlistener);
 			TimerControl();
 			mCTimer.start();

@@ -39,7 +39,6 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, mDevice_List_Fragment).commit();
-			Log.d(TAG,"Never Reached");
 		}
 		//Adds images to action bar
 		ActionBar actionBar = getSupportActionBar();
@@ -47,7 +46,6 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 
 		LayoutInflater inflator = (LayoutInflater) this .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflator.inflate(R.layout.actionbarlayout, null);
-
 		actionBar.setCustomView(v);
 
 	}
@@ -61,9 +59,10 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 	}
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
-			mManager.closeDownChat();
-			finish();
+		if(keyCode == KeyEvent.KEYCODE_BACK /*|| keyCode == KeyEvent.KEYCODE_HOME*/){
+			//mManager.closeDownChat();
+			mManager.removeAndStopServiceDisc();
+			this.finish();
 			Intent intent = new Intent(this, WDCCScanningActivity.class);
 			startActivity(intent);
 		}

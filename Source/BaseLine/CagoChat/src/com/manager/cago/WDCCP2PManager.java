@@ -301,8 +301,12 @@ public class WDCCP2PManager {
 
 	public void closeDownChat() {
 		removeAndStopServiceDisc();
-		mAndroidP2Pmanager.requestConnectionInfo(mChannel, null);
+		stopConnectionInfoListener();
 		mAndroidP2Pmanager.removeGroup(mChannel, null);	
+	}
+	public void stopConnectionInfoListener(){
+		mAndroidP2Pmanager.requestConnectionInfo(mChannel, null);
+
 	}
 	public void removeGroup(){
 		mAndroidP2Pmanager.removeGroup(mChannel, null);	

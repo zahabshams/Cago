@@ -43,11 +43,7 @@
             android:configChanges="orientation|screenSize"
             >
         </activity>
-        <activity
-            android:name="com.viewer.cagochat.ChatTest"
-            >
-        </activity>
-        <activity
+       <activity
             android:name="com.viewer.cagochat.ChatActivity_Test"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenSize"

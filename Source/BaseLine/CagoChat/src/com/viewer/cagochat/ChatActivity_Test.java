@@ -5,6 +5,7 @@ import com.manager.cago.WDCCP2PManager;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,7 +28,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		Handler.Callback {
 	public static final int MESSAGE_READ = 0x400 + 1;
 	public static final int MY_HANDLE = 0x400 + 2;
-	protected static final String TAG = WDCCChatActivity.class.getSimpleName();
+	protected static final String TAG = ChatActivity_Test.class.getSimpleName();
 	private WiFiChatFragment chatFragment;
 	private Handler m_Msg_handler = new Handler(this);
 	private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
@@ -129,12 +130,19 @@ public class ChatActivity_Test extends ActionBarActivity implements
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
-			mManager.closeDownChat();
-			finish();
-		//	getActivity().finish();
-
-		}
+		if(keyCode == KeyEvent.KEYCODE_BACK ){
+/*			mManager.closeDownChat();
+*/			this.finish();
+			Intent intent = new Intent(this, WDCCScanningActivity.class);
+			startActivity(intent);
+		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
+			
+		} 
 		return super.onKeyUp(keyCode, event);
 	}
+	@Override
+protected void onDestroy() {
+		mManager.closeDownChat();
+		super.onDestroy();
+}
 }

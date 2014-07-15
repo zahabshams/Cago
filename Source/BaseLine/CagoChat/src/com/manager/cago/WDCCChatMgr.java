@@ -59,6 +59,7 @@ public class WDCCChatMgr implements Runnable {
 	public WDCCChatMgr(Socket socket) {
 		setSocket(socket);
 		mManager = WDCCP2PManager.getWDCCP2PManager();
+		mManager.stopConnectionInfoListener();	//After starting chat I am not interested in the connectioninfo.
 		mManager.registerSessionListener(mSessionListener);
 		}
 

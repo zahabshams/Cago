@@ -71,6 +71,7 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 		 */
 
 		if (p2pInfo.isGroupOwner) {
+			
 			Log.d(TAG, "Connected as group owner");
 			try {
 				handler = new WDCCGOSocketMgr(this.handler);

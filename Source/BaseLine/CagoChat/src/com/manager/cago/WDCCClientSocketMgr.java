@@ -8,9 +8,6 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-
-import com.viewer.cagochat.WDCCBroadcastReceiver;
-
 import android.os.Handler;
 import android.util.Log;
 
@@ -19,7 +16,7 @@ import android.util.Log;
  * 
  */
 public class WDCCClientSocketMgr extends Thread {
-	protected static final String TAG = WDCCBroadcastReceiver.class
+	protected static final String TAG = WDCCClientSocketMgr.class
 			.getSimpleName();
 
 	private WDCCChatMgr mChatMgr;

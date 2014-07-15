@@ -64,7 +64,6 @@ public class WiFiChatFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						mManager.closeDownChat();
-						//mManager.removeGroup();
 						getActivity().finish();
 							Log.d("TAG","You clicked on END button");
 						}
