@@ -108,7 +108,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				.getSimpleName();
 		private WDCCP2PManager mManager = null;
 		private CountDownTimer mCTimer;
-		private int mScanTimeout = 60 * 1000;
+		private int mScanTimeout = 30 * 1000;
 		private AlertDialog mdialog = null;
 		private WDCCScanningFragment mScanningFrag;
 		private ProgressBar progressbar1;
