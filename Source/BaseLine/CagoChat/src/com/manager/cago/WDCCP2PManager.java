@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.content.Context;
 import android.content.Intent;
@@ -37,14 +38,23 @@ import com.viewer.cagochat.WDCCViewerManager;
  * 
  */
 public class WDCCP2PManager {
+
+	private synchronized boolean isInitialised() {
+		return initialised;
+	}
+
+	private synchronized void setInitialised(boolean initialised) {
+		this.initialised = initialised;
+	}
+
 	public WDCCPeerlistener mWDPeerlistener = null;
 	public WDCCBroadcastReceiver mP2PBroadcastReceiver = null;
 	private WifiP2pManager mAndroidP2Pmanager = null;
 	public Context mContext = null;
-	private LinkedList<SessionListenerImp> mSessionlistenerList= new LinkedList<SessionListenerImp>();
+	private LinkedList<SessionListenerImp> mSessionlistenerList = new LinkedList<SessionListenerImp>();
 	/**
-	 * <blockquote>
-	 * the synchronised to hold the P2P devices with specified service.
+	 * <blockquote> the synchronised to hold the P2P devices with specified
+	 * service.
 	 */
 	private List<WDCCP2PService> mServiceList = null;
 	private Channel mChannel = null;
@@ -54,13 +64,14 @@ public class WDCCP2PManager {
 	private Runnable run = null;
 	protected static final String TAG = WDCCP2PManager.class.getSimpleName();
 	private WDCCChatMgr mChatMgr = null;
-
+	private boolean initialised = false;
+	private Object mSyncobj = new Object();
 	protected WDCCP2PManager(Context context) {
 		Log.d(TAG, "WDCCP2PManager created");
 		mContext = context;
 	}
 
-	public void setupP2P(){
+	public void setupP2P() /* throws InterruptedException */{
 		run = new Runnable() {
 
 			@Override
@@ -69,8 +80,9 @@ public class WDCCP2PManager {
 			}
 		};
 		Thread thread = new Thread(run);
-		thread.start();		
+		thread.start();
 	}
+
 	/**
 	 * @return the mConnectionMgr
 	 */
@@ -84,8 +96,8 @@ public class WDCCP2PManager {
 	 * @return the mManager
 	 */
 	private static WDCCP2PManager getmManager() {
-		Log.d(TAG,"Test="+mManager);
-	//	mManager = WDCCP2PManager.iInstantiateManager(this);
+		Log.d(TAG, "Test=" + mManager);
+		// mManager = WDCCP2PManager.iInstantiateManager(this);
 		return mManager;
 	}
 
@@ -185,24 +197,32 @@ public class WDCCP2PManager {
 	 * 
 	 */
 	private void initialise() {
+		setInitialised(false);
 		Log.d(TAG, "-------------------initialise---------------------------");
 		mServiceList = Collections
 				.synchronizedList(new ArrayList<WDCCP2PService>());
 		mWDPeerlistener = new WDCCPeerlistener();
 		mAndroidP2Pmanager = (WifiP2pManager) mContext
 				.getSystemService(Context.WIFI_P2P_SERVICE);
+
 		// zahab need to work on third argument of initialize which is null now.
-		
+
 		mChannel = mAndroidP2Pmanager.initialize(mContext,
 				mContext.getMainLooper(), null);
+
 		mConnectionMgr = new WDCCConnectionMgr();
 
 		mP2PBroadcastReceiver = new WDCCBroadcastReceiver(mAndroidP2Pmanager,
 				mChannel, mWDPeerlistener);
 		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager,
 				this);
-		startRegistrationAndDiscovery();
-		
+		setInitialised(true);
+		synchronized (mSyncobj) {
+			mSyncobj.notifyAll();
+
+		}
+		// startRegistrationAndDiscovery();
+
 	}
 
 	public boolean notifyDeviceDisconnected(WifiP2pDevice device) {
@@ -283,7 +303,7 @@ public class WDCCP2PManager {
 	public void registerDevListListener(
 			WDCCViewerManager.DevList devListListener) {
 		Log.d(TAG, "registerDevListListener");
-	//	mDevListListener = null;
+		// mDevListListener = null;
 		mDevListListener = devListListener;
 	}
 
@@ -293,24 +313,58 @@ public class WDCCP2PManager {
 	}
 
 	public boolean startRegistrationAndDiscovery() {
-		mServiceList.clear();
-		mServiceManager.startRegistrationAndDiscovery();
-		return false;
+
+		Runnable run = new Runnable() {
+
+			@Override
+			public void run() {
+				if (isInitialised()) {
+					mServiceList.clear();
+					mServiceManager.startRegistrationAndDiscovery();
+					return;
+				} else {
+					try {
+						
+						synchronized (mSyncobj) {
+							Log.d(TAG,
+									"---------Waiting for thread notification--------");
+							mSyncobj.wait();
+							mServiceList.clear();
+							mServiceManager.startRegistrationAndDiscovery();
+							
+						}
+						
+						return;
+					} catch (InterruptedException e) {
+						Log.d(TAG, "---------Waiting Exception--------");
+						e.printStackTrace();
+					}
+
+				}
+
+			}
+		};
+		Thread thread = new Thread(run);
+		thread.start();
+		return true;
 
 	}
 
 	public void closeDownChat() {
 		removeAndStopServiceDisc();
 		stopConnectionInfoListener();
-		mAndroidP2Pmanager.removeGroup(mChannel, null);	
+		mAndroidP2Pmanager.removeGroup(mChannel, null);
 	}
-	public void stopConnectionInfoListener(){
+
+	public void stopConnectionInfoListener() {
 		mAndroidP2Pmanager.requestConnectionInfo(mChannel, null);
 
 	}
-	public void removeGroup(){
-		mAndroidP2Pmanager.removeGroup(mChannel, null);	
+
+	public void removeGroup() {
+		mAndroidP2Pmanager.removeGroup(mChannel, null);
 	}
+
 	public boolean stopServiceDiscovery() {
 		return mServiceManager.stopServiceDiscovery();
 	}
@@ -323,36 +377,39 @@ public class WDCCP2PManager {
 	public void connectP2p(WDCCP2PService service) {
 		mConnectionMgr.connectP2p(service);
 	}
-	
-	public void registerSessionListener(SessionListenerImp listener){
 
-        Log.i(TAG, "registerMirrorLinkSessionListner("+(listener==null?"null":"")+")");
-        if(listener == null) {
-            return;
-        }
-        
-        synchronized (mSessionlistenerList) {
+	public void registerSessionListener(SessionListenerImp listener) {
+
+		Log.i(TAG, "registerMirrorLinkSessionListner("
+				+ (listener == null ? "null" : "") + ")");
+		if (listener == null) {
+			return;
+		}
+
+		synchronized (mSessionlistenerList) {
 			if (mSessionlistenerList.contains(listener)) {
 				Log.w(TAG, "MirrorLinkSessionListner already known");
 				return;
 			}
 			mSessionlistenerList.add(listener);
-        }
-    
+		}
+
 		mSessionlistenerList.add(listener);
 	}
-	public void deregisterSessionListener(SessionListenerImp listener){
 
-        Log.i(TAG, "deregisterSessionListener("+(listener==null?"null":"")+")");
-        if(listener == null) {
-            return;
-        }
+	public void deregisterSessionListener(SessionListenerImp listener) {
+
+		Log.i(TAG, "deregisterSessionListener("
+				+ (listener == null ? "null" : "") + ")");
+		if (listener == null) {
+			return;
+		}
 
 		synchronized (mSessionlistenerList) {
 			if (!mSessionlistenerList.remove(listener)) {
 				Log.w(TAG, "SessionListner not known");
 			}
 		}
-    
+
 	}
 }

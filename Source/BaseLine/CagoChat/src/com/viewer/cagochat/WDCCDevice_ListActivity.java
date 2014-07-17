@@ -63,8 +63,8 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 			//mManager.closeDownChat();
 			mManager.removeAndStopServiceDisc();
 			this.finish();
-			Intent intent = new Intent(this, WDCCScanningActivity.class);
-			startActivity(intent);
+			/*Intent intent = new Intent(this, WDCCScanningActivity.class);
+			startActivity(intent);*/
 		}
 		return super.onKeyUp(keyCode, event);
 	}

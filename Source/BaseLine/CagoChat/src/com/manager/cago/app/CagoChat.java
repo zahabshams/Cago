@@ -36,6 +36,7 @@ public class CagoChat extends Application {
 		Log.d(TAG, "onCreate");
 		Log.d("MyTest","in cago chat");
 		mManager = WDCCP2PManager.iInstantiateManager(this);
+		mManager.setupP2P();
 		super.onCreate();
 	}
 
