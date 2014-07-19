@@ -63,14 +63,4 @@ public class WDCCChatActivity extends ActionBarActivity implements
 		}
 		return true;
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.support.v4.app.FragmentActivity#onDestroy()
-	 */
-	@Override
-protected void onDestroy() {
-super.onDestroy();
-}
 }

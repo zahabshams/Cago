@@ -18,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pManager.ActionListener;
 import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Handler;
 import android.util.Log;
@@ -193,8 +194,8 @@ public class WDCCP2PManager {
 	}
 
 	/**
-	 * @return
-	 * 
+	 * @return <blockquote> To start the P2P manager and get the system
+	 *         resources. Should be done once through the life-cycle of App/
 	 */
 	private void initialise() {
 		setInitialised(false);
@@ -312,7 +313,7 @@ public class WDCCP2PManager {
 		return mServiceManager.removeAndStopServiceDisc();
 	}
 
-	public boolean startRegistrationAndDiscovery() {
+	public boolean addLocalService() {
 
 		Runnable run = new Runnable() {
 
@@ -320,7 +321,7 @@ public class WDCCP2PManager {
 			public void run() {
 				if (isInitialised()) {
 					mServiceList.clear();
-					mServiceManager.startRegistrationAndDiscovery();
+					mServiceManager.addLocalService();
 					return;
 				} else {
 					try {
@@ -330,7 +331,7 @@ public class WDCCP2PManager {
 									"---------Waiting for thread notification--------");
 							mSyncobj.wait();
 							mServiceList.clear();
-							mServiceManager.startRegistrationAndDiscovery();
+							mServiceManager.addLocalService();
 							
 						}
 						
@@ -353,7 +354,7 @@ public class WDCCP2PManager {
 	public void closeDownChat() {
 		removeAndStopServiceDisc();
 		stopConnectionInfoListener();
-		mAndroidP2Pmanager.removeGroup(mChannel, null);
+		removeGroup();
 	}
 
 	public void stopConnectionInfoListener() {
@@ -361,11 +362,39 @@ public class WDCCP2PManager {
 
 	}
 
-	public void removeGroup() {
-		mAndroidP2Pmanager.removeGroup(mChannel, null);
+	private void notifyRemoveGroupStatus(boolean success) {
+		Log.d(TAG, "notifyRemoveGroupStatus");
+		synchronized (mSessionlistenerList) {
+			for (SessionListenerImp listner : mSessionlistenerList) {
+				if (success)
+					listner.onRemoveGroupSuccess();
+				else
+					listner.onRemoveGroupFail();
+
+			}
+		}
 	}
+	public boolean isLocalServRegd(){
+		return mServiceManager.isLocalServRegd();
+	}
+	public void removeGroup() {
+		mAndroidP2Pmanager.removeGroup(mChannel, new ActionListener() {
+
+			@Override
+			public void onSuccess() {
+				Log.d(TAG, "----------removeGroup onSuccess");
+				notifyRemoveGroupStatus(true);
+			}
+
+			@Override
+			public void onFailure(int errorCode) {
+				Log.d(TAG, "removeGroup onFailure errorCode = " + errorCode);
+				notifyRemoveGroupStatus(false);
+			}
+		});	}
 
 	public boolean stopServiceDiscovery() {
+		mServiceList.clear();
 		return mServiceManager.stopServiceDiscovery();
 	}
 
@@ -373,14 +402,14 @@ public class WDCCP2PManager {
 		mServiceList.clear();
 		mServiceManager.startServiceDiscovery();
 	}
-
+	
 	public void connectP2p(WDCCP2PService service) {
 		mConnectionMgr.connectP2p(service);
 	}
 
 	public void registerSessionListener(SessionListenerImp listener) {
 
-		Log.i(TAG, "registerMirrorLinkSessionListner("
+		Log.i(TAG, "registerSessionListener("
 				+ (listener == null ? "null" : "") + ")");
 		if (listener == null) {
 			return;
@@ -388,13 +417,14 @@ public class WDCCP2PManager {
 
 		synchronized (mSessionlistenerList) {
 			if (mSessionlistenerList.contains(listener)) {
-				Log.w(TAG, "MirrorLinkSessionListner already known");
+				Log.w(TAG, "registerSessionListener already known");
 				return;
 			}
+			Log.d(TAG, "Session Listener registered");
 			mSessionlistenerList.add(listener);
 		}
 
-		mSessionlistenerList.add(listener);
+		//mSessionlistenerList.add(listener);
 	}
 
 	public void deregisterSessionListener(SessionListenerImp listener) {
@@ -411,5 +441,10 @@ public class WDCCP2PManager {
 			}
 		}
 
+	}
+	
+	public boolean isDiscoveryActive(){
+		return mServiceManager.isDiscoveryActive();
+		
 	}
 }

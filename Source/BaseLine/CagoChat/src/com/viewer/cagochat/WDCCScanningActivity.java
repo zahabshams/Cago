@@ -24,6 +24,9 @@ import com.manager.cago.WDCCP2PService;
 import com.manager.cago.listeners.SessionListenerImp;
 
 public class WDCCScanningActivity extends ActionBarActivity {
+	
+
+
 	protected static final String TAG = WDCCScanningActivity.class
 			.getSimpleName();
 	public Context mContext = null;
@@ -49,7 +52,8 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View v = inflator.inflate(R.layout.actionbarlayout, null);
 		actionBar.setCustomView(v);
-		mManager.startRegistrationAndDiscovery();
+		//mManager.
+		mManager.addLocalService();
 	}
 
 	@Override
@@ -106,6 +110,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 	 */
 	public static class WDCCScanningFragment extends Fragment implements
 			WDCCViewerManager.DevList {
+		
 		protected static final String TAG = WDCCScanningFragment.class
 				.getSimpleName();
 		private WDCCP2PManager mManager = null;
@@ -149,9 +154,9 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			btnBrowse.setOnClickListener(browse);
 
 			scanButton.setOnClickListener(scanning);
-			mManager.registerSessionListener(mSessionlistener);
+			//mManager.registerSessionListener(mSessionlistener);
 			TimerControl();
-			mCTimer.start();
+			//mCTimer.start();
 			return rootView;
 		}
 
@@ -164,15 +169,20 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		@Override
 		public void onStop() {
 			Log.d(TAG, "onStop");
-			// mCTimer.cancel();
+			 mCTimer.cancel();
 			super.onStop();
 		}
 
 		@Override
 		public void onResume() {
-			Log.d(TAG, "onResume(");
+			Log.d(TAG, "onResume");
 			mScanningFrag = this;
 			mManager.registerDevListListener(this);
+			if(mManager.isDiscoveryActive()){
+				mManager.stopServiceDiscovery();
+			}		
+			mManager.startServiceDiscovery();
+			mCTimer.start();
 			super.onResume();
 		}
 
@@ -180,7 +190,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 		public void onDestroy() {
 			Log.d(TAG, "onDestroy(");
 			mCTimer.cancel();
-			mManager.deregisterSessionListener(mSessionlistener);
+			//mManager.deregisterSessionListener(mSessionlistener);
 			super.onDestroy();
 		}
 
@@ -197,11 +207,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			}
 		};
 
-		private boolean handleKeyEvents(int keycode, KeyEvent event) {
-			return false;
-
-		}
-
+	
 		OnClickListener scanning = new OnClickListener() {
 
 			@Override
@@ -209,7 +215,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 				progressbar2.setVisibility(8);// removes stop progress bar
 				progressbar1.setVisibility(0);// display moving progress bar
 				scanButton.setEnabled(false);
-				mCTimer.start();
+				//mCTimer.start();
 				mManager.registerDevListListener(mScanningFrag);
 				mManager.startServiceDiscovery();
 

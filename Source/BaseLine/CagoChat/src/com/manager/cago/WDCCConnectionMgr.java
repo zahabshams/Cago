@@ -42,6 +42,7 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 		Channel channel = mManager.getP2PChannel();
 
 		mManager.stopServiceDiscovery();
+		
 		mAndroidP2Pmanager.connect(channel, config, new ActionListener() {
 
 			@Override
@@ -64,6 +65,9 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 	public void onConnectionInfoAvailable(WifiP2pInfo p2pInfo) {
 		Thread handler = null;
 		Log.d(TAG, "onConnectionInfoAvailable");
+		if(p2pInfo== null){
+			Log.d(TAG, "p2pInfo== null");
+		}
 		/*
 		 * The group owner accepts connections using a server socket and then
 		 * spawns a client socket for every client. This is handled by {@code
@@ -82,9 +86,14 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 				return;
 			}
 		} else {
+			if(p2pInfo.groupOwnerAddress== null){
+				Log.d(TAG, "p2pInfo.groupOwnerAddress== null");
+				return;
+			}
 			Log.d(TAG, "Connected as peer");
 			handler = new WDCCClientSocketMgr(this.handler,
 					p2pInfo.groupOwnerAddress);
+			
 			handler.start();
 		}
 

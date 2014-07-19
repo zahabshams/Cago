@@ -1,3 +1,5 @@
 android.support.v7.appcompat
 com.manager.cago
+com.manager.cago.app
+com.manager.cago.listeners
 com.viewer.cagochat

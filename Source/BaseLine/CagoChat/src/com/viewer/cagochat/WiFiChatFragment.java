@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.manager.cago.WDCCChatMgr;
 import com.manager.cago.WDCCP2PManager;
+import com.manager.cago.listeners.SessionListenerImp;
 
 /**
  * This fragment handles chat related UI which includes a list view for messages
@@ -24,7 +25,7 @@ import com.manager.cago.WDCCP2PManager;
  */
 public class WiFiChatFragment extends Fragment {
 
-	private static final String TAG = "WiFiChatFragment";
+	private static final String TAG = "WDCCChatFragment";
 	private View view;
 	private WDCCChatMgr chatManager;
 	private TextView chatLine;
@@ -32,11 +33,34 @@ public class WiFiChatFragment extends Fragment {
 	ChatMessageAdapter adapter = null;
 	private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
 	private List<String> items = new ArrayList<String>();
+	SessionListenerImp mSessionListener = null;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		Log.d(TAG, "onCreateView");
+		mSessionListener = new SessionListenerImp(){
+
+			/* (non-Javadoc)
+			 * @see com.manager.cago.listeners.SessionListenerImp#onRemoveGroupSuccess()
+			 */
+			@Override
+			public void onRemoveGroupSuccess() {
+				Log.d(TAG, "onRemoveGroupSuccess");
+				getActivity().finish();
+				super.onRemoveGroupSuccess();
+			}
+
+			/* (non-Javadoc)
+			 * @see com.manager.cago.listeners.SessionListenerImp#onRemoveGroupFail()
+			 */
+			@Override
+			public void onRemoveGroupFail() {
+				Log.d(TAG, "onRemoveGroupFail");
+				super.onRemoveGroupFail();
+			}
+			
+		};
 		view = inflater.inflate(R.layout.fragment_chat, container, false);
 		chatLine = (TextView) view.findViewById(R.id.txtChatLine);
 		listView = (ListView) view.findViewById(android.R.id.list);
@@ -63,9 +87,10 @@ public class WiFiChatFragment extends Fragment {
 
 					@Override
 					public void onClick(View v) {
-						mManager.closeDownChat();
-						getActivity().finish();
-							Log.d("TAG","You clicked on END button");
+						Log.d("TAG","END button Clicked");
+						mManager.removeGroup();
+						//mManager.closeDownChat();
+			/*			getActivity().finish();*/
 						}
 					
 				});
@@ -74,7 +99,19 @@ public class WiFiChatFragment extends Fragment {
 
 		return view;
 	}
+	@Override
+	public void onResume(){
+		mManager.registerSessionListener(mSessionListener);
+		super.onResume();
 
+	}
+
+	@Override
+	public void onPause(){
+		//mManager.deregisterSessionListener(mSessionListener);
+		super.onPause();
+
+	}
 	public interface MessageTarget {
 		public Handler getHandler();
 	}

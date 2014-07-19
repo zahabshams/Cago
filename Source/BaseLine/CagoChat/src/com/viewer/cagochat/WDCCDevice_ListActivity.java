@@ -31,10 +31,10 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 
 		setContentView(R.layout.activity_device_list);
 		mManager = WDCCP2PManager.getWDCCP2PManager();
-
-		mContext = mManager.getappContext();// getApplicationContext();
 		mDevice_List_Fragment = new WDCCList_Fragment();
 		mManager.registerDevListListener(mDevice_List_Fragment);
+		mContext = mManager.getappContext();// getApplicationContext();
+		
 		if (savedInstanceState == null) {
 
 			getFragmentManager().beginTransaction()

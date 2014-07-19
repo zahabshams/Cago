@@ -24,18 +24,33 @@ import android.util.Log;
  */
 public class WDCCServiceManager {
 
+	/**
+	 * @return the isLocalServeRegd
+	 */
+	public boolean isLocalServRegd() {
+		return isLocalServeRegd;
+	}
+
+	/**
+	 * @return the isDiscoveryActive
+	 */
+	public boolean isDiscoveryActive() {
+		return isDiscoveryActive;
+	}
 	protected static final String TAG = WDCCServiceManager.class
 			.getSimpleName();
 	public static final String TXTRECORD_PROP_AVAILABLE = "available";
 	public static final String SERVICE_INSTANCE = "_wifidemotest";
 	public static final String SERVICE_REG_TYPE = "_presence._tcp";
-	private WifiP2pManager mAndroidP2Pmanager;
-	private WDCCP2PManager mManager;
+	private WifiP2pManager mAndroidP2Pmanager = null;;
+	private WDCCP2PManager mManager = null;;
 	static final int SERVER_PORT = 4545;
-	private Channel mChannel;
-	private WifiP2pDnsSdServiceRequest mServiceRequest;
+	private Channel mChannel = null;;
+	private WifiP2pDnsSdServiceRequest mServiceRequest = null;
 	private WifiP2pDnsSdServiceInfo mServiceInfo = null;
 	private boolean ret = false;
+	protected boolean isDiscoveryActive = false;
+	protected boolean isLocalServeRegd = false;
 	static int numberServiceAdded =0;
 	static int numberdiscoverer =0;
 
@@ -54,11 +69,11 @@ public class WDCCServiceManager {
 		mAndroidP2Pmanager = androidP2PManager;
 		mChannel = channel;
 		mManager = manager;
-		startRegistrationAndDiscovery();
+		addLocalService();
 	}
 
-	public void startRegistrationAndDiscovery() {
-		Log.d(TAG, "startRegistrationAndDiscovery");
+	public void addLocalService() {
+		Log.d(TAG, "addLocalService");
 		Map<String, String> record = new HashMap<String, String>();
 		record.put(TXTRECORD_PROP_AVAILABLE, "visible");
 
@@ -73,6 +88,7 @@ public class WDCCServiceManager {
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "addLocalService onSuccess");
+						isLocalServeRegd = true;
 						// appendStatus("Added Local Service");
 					}
 
@@ -83,11 +99,11 @@ public class WDCCServiceManager {
 					}
 				});
 
-		discoverService();
+		//discoverService();
 
 	}
 
-	private void discoverService() {
+	public void discoverService() {
 		++numberdiscoverer;
 		/**
 		 * <blockquote>>Register listeners for DNS-SD services. These are callbacks invoked
@@ -144,6 +160,7 @@ public class WDCCServiceManager {
 
 					@Override
 					public void onSuccess() {
+						isDiscoveryActive = true;
 						Log.d(TAG, "addServiceRequest onSuccess");
 					}
 
@@ -175,12 +192,14 @@ public class WDCCServiceManager {
 
 	boolean stopServiceDiscovery() {
 		Log.d(TAG, "stopServiceDiscovery");
+		//mAndroidP2Pmanager.clearServiceRequests(mChannel, new ActionListener() {
 		mAndroidP2Pmanager.removeServiceRequest(mChannel, mServiceRequest,new ActionListener() {
 
 			@Override
 			public void onSuccess() {
 				Log.d(TAG, "removeServiceRequest onSuccess");
 				ret = true;
+				isDiscoveryActive  = false;
 			}
 
 			@Override
@@ -200,6 +219,7 @@ public class WDCCServiceManager {
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "removeLocalService onSuccess");
+						isLocalServeRegd = false;
 						ret = true;
 					}
 

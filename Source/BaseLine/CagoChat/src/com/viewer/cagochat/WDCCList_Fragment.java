@@ -104,7 +104,7 @@ public class WDCCList_Fragment extends ListFragment implements
 	@Override
 	public void onStop() {
 		Log.d(TAG, "onStop");
-		mManager.deregisterDevListListener();
+		//mManager.deregisterDevListListener();
 		super.onStop();
 	}
 
