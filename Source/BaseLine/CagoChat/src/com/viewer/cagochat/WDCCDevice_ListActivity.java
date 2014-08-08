@@ -61,6 +61,7 @@ public class WDCCDevice_ListActivity extends ActionBarActivity {
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK /*|| keyCode == KeyEvent.KEYCODE_HOME*/){
 			//mManager.closeDownChat();
+			Log.d(TAG, "onKeyUp calling removeAndStopServiceDisc()");
 			mManager.removeAndStopServiceDisc();
 			this.finish();
 			/*Intent intent = new Intent(this, WDCCScanningActivity.class);

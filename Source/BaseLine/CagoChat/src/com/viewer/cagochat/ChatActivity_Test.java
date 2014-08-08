@@ -131,18 +131,19 @@ public class ChatActivity_Test extends ActionBarActivity implements
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK ){
-/*			mManager.closeDownChat();
-*/			this.finish();
-			Intent intent = new Intent(this, WDCCScanningActivity.class);
-			startActivity(intent);
+			mManager.closeDownChat(true);
+			this.finish();
+		/*	Intent intent = new Intent(this, WDCCScanningActivity.class);
+			startActivity(intent);*/
 		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
-			
+			this.finish();
+			mManager.closeDownChat(false);
 		} 
 		return super.onKeyUp(keyCode, event);
 	}
 	@Override
 protected void onDestroy() {
-		mManager.closeDownChat();
+		//mManager.closeDownChat(false);
 		super.onDestroy();
 }
 }

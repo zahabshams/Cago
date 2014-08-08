@@ -40,7 +40,7 @@ public class WDCCConnectionMgr implements ConnectionInfoListener {
 		config.wps.setup = WpsInfo.PBC;
 		WifiP2pManager mAndroidP2Pmanager = mManager.getAndroidP2Pmanager();
 		Channel channel = mManager.getP2PChannel();
-
+		Log.d(TAG, "connectP2p calling stopServiceDiscovery");
 		mManager.stopServiceDiscovery();
 		
 		mAndroidP2Pmanager.connect(channel, config, new ActionListener() {

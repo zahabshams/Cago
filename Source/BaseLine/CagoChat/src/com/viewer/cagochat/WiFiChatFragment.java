@@ -57,6 +57,7 @@ public class WiFiChatFragment extends Fragment {
 			@Override
 			public void onRemoveGroupFail() {
 				Log.d(TAG, "onRemoveGroupFail");
+				getActivity().finish();
 				super.onRemoveGroupFail();
 			}
 			
@@ -88,13 +89,14 @@ public class WiFiChatFragment extends Fragment {
 					@Override
 					public void onClick(View v) {
 						Log.d("TAG","END button Clicked");
-						mManager.removeGroup();
-						//mManager.closeDownChat();
+						//mManager.removeGroup();
+						mManager.closeDownChat(true);
 			/*			getActivity().finish();*/
 						}
 					
 				});
 		chatManager = mManager.getChatMgr();
+		Log.d(TAG, "onCreateView calling stopServiceDiscovery");
 		mManager.stopServiceDiscovery();
 
 		return view;

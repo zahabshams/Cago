@@ -60,7 +60,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 	public void onResume() {
 		super.onResume();
 		mManager = WDCCP2PManager.getWDCCP2PManager();
-		mManager.registerBroadCastReceiver();
+		//mManager.registerBroadCastReceiver();
 	}
 
 	@Override
@@ -83,7 +83,8 @@ public class WDCCScanningActivity extends ActionBarActivity {
 
 	@Override
 	public void onDestroy() {
-		Log.d(TAG, "--------onActivityDestroy(");
+		Log.d(TAG, "--------onActivityDestroy");
+		Log.d(TAG, "calling removeAndStopServiceDisc");
 		mManager.removeAndStopServiceDisc();
 		super.onDestroy();
 	}
@@ -178,7 +179,12 @@ public class WDCCScanningActivity extends ActionBarActivity {
 			Log.d(TAG, "onResume");
 			mScanningFrag = this;
 			mManager.registerDevListListener(this);
-			if(mManager.isDiscoveryActive()){
+			if(!mManager.isLocalServRegd()){
+				Log.d(TAG, "isLocalServRegd()" + mManager.isLocalServRegd());
+				mManager.addLocalService();
+			}
+			else if(mManager.isDiscoveryActive()){
+				Log.d(TAG, "isDiscoveryActive()" + mManager.isDiscoveryActive());
 				mManager.stopServiceDiscovery();
 			}		
 			mManager.startServiceDiscovery();
@@ -256,7 +262,7 @@ public class WDCCScanningActivity extends ActionBarActivity {
 					mdialog.setCancelable(false);
 					mdialog.setMessage("Do you want to restart scanning?");
 					mManager.deregisterDevListListener();
-					// mManager.removeAndStopServiceDisc();
+					Log.d(TAG, "onFinish calling stopServiceDiscovery");
 					mManager.stopServiceDiscovery();
 
 					mdialog.setButton(DialogInterface.BUTTON_NEGATIVE, "NO",

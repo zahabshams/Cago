@@ -144,6 +144,7 @@ public class WDCCP2PManager {
 		Intent intent = new Intent(mContext, ChatActivity_Test.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		mContext.startActivity(intent);
+		deregisterBroadCastReceiver();
 		return mChatMgr;
 
 	}
@@ -218,6 +219,7 @@ public class WDCCP2PManager {
 		mServiceManager = new WDCCServiceManager(mChannel, mAndroidP2Pmanager,
 				this);
 		setInitialised(true);
+		registerBroadCastReceiver();
 		synchronized (mSyncobj) {
 			mSyncobj.notifyAll();
 
@@ -351,10 +353,15 @@ public class WDCCP2PManager {
 
 	}
 
-	public void closeDownChat() {
+	public void closeDownChat(boolean restart) {
+		Log.d(TAG, "calling removeAndStopServiceDisc");
 		removeAndStopServiceDisc();
 		stopConnectionInfoListener();
 		removeGroup();
+		if(restart)
+			setupP2P();
+		else
+			Log.d(TAG, "session end and with no restart");
 	}
 
 	public void stopConnectionInfoListener() {
@@ -379,7 +386,7 @@ public class WDCCP2PManager {
 	}
 	public void removeGroup() {
 		mAndroidP2Pmanager.removeGroup(mChannel, new ActionListener() {
-
+			
 			@Override
 			public void onSuccess() {
 				Log.d(TAG, "----------removeGroup onSuccess");

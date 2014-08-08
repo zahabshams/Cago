@@ -19,16 +19,19 @@ import android.net.wifi.p2p.nsd.WifiP2pDnsSdServiceRequest;
 import android.util.Log;
 
 /**
- * @author zahab For registering DNS service and listening to the available
- *         service same signature
+ * @author zahab 
+ * <blockquote>
+ * For registering DNS service and listening to the available
+ * service same signature
  */
+
 public class WDCCServiceManager {
 
 	/**
-	 * @return the isLocalServeRegd
+	 * @return the isLocalServRegd
 	 */
 	public boolean isLocalServRegd() {
-		return isLocalServeRegd;
+		return isLocalServRegd;
 	}
 
 	/**
@@ -50,7 +53,7 @@ public class WDCCServiceManager {
 	private WifiP2pDnsSdServiceInfo mServiceInfo = null;
 	private boolean ret = false;
 	protected boolean isDiscoveryActive = false;
-	protected boolean isLocalServeRegd = false;
+	protected boolean isLocalServRegd = false;
 	static int numberServiceAdded =0;
 	static int numberdiscoverer =0;
 
@@ -88,7 +91,7 @@ public class WDCCServiceManager {
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "addLocalService onSuccess");
-						isLocalServeRegd = true;
+						isLocalServRegd = true;
 						// appendStatus("Added Local Service");
 					}
 
@@ -219,7 +222,7 @@ public class WDCCServiceManager {
 					@Override
 					public void onSuccess() {
 						Log.d(TAG, "removeLocalService onSuccess");
-						isLocalServeRegd = false;
+						isLocalServRegd = false;
 						ret = true;
 					}
 
