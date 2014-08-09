@@ -23,7 +23,7 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 
 	private WifiP2pManager mAndroidP2PManager = null;
 	private Channel mchannel = null;
-/*	private Activity activity;*/
+	/* private Activity activity; */
 	private WDCCPeerlistener mPeerListener;
 	public final IntentFilter intentFilter = new IntentFilter();
 	private WDCCP2PManager mManager = null;
@@ -63,22 +63,20 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Log.d(TAG, "onReceive" + action);
-		
+
 		if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_CONNECTION_CHANGED_ACTION");
-			
-			
-			
+
 			NetworkInfo networkInfo = (NetworkInfo) intent
 					.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
 			Log.d(TAG, "networkInfo.isConnected()" + networkInfo.isConnected());
 			if (networkInfo.isConnected()) {
-				Log.d(TAG, "networkInfo.isConnected()-----------------1" );
+				Log.d(TAG, "networkInfo.isConnected()-----------------1");
 				// we are connected with the other device, request connection
 				// info to find group owner IP
-				mAndroidP2PManager.requestConnectionInfo(mchannel,mManager.getConnectionMgr());
-				
-				
+				mAndroidP2PManager.requestConnectionInfo(mchannel,
+						mManager.getConnectionMgr());
+
 			} else {
 				// It's a disconnect
 			}
@@ -86,12 +84,14 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 		} else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
 				.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION");
-			if(mchannel == null){
-				Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mchannel == null)");
+			if (mchannel == null) {
+				Log.d(TAG,
+						"WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mchannel == null)");
 
 			}
-			if(mPeerListener == null){
-				Log.d(TAG, "WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mPeerListener == null)");
+			if (mPeerListener == null) {
+				Log.d(TAG,
+						"WIFI_P2P_THIS_DEVICE_CHANGED_ACTION     (mPeerListener == null)");
 
 			}
 			mAndroidP2PManager.requestPeers(mchannel, mPeerListener);
@@ -104,7 +104,18 @@ public class WDCCBroadcastReceiver extends BroadcastReceiver {
 
 		} else if (WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
 			Log.d(TAG, "WIFI_P2P_STATE_CHANGED_ACTION");
+			int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+			if (state == WifiP2pManager.WIFI_P2P_STATE_DISABLED) {
+				Log.d(TAG, "WIFI_P2P_STATE_DISABLED");
 
+			} else if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
+				Log.d(TAG, "WIFI_P2P_STATE_ENABLED");
+
+			}
+			/*
+			 * int stateq
+			 * =intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_STATE);
+			 */
 		}
 
 	}
