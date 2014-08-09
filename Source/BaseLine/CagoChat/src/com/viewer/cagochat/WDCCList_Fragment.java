@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.manager.cago.WDCCP2PManager;
 import com.manager.cago.WDCCP2PService;
-import com.manager.cago.WDCCP2PService.serviceOperation;
+import com.manager.cago.WDCCP2PService.ServiceListOperation;
 
 /**
  * A ListFragment that displays available mServiceDeviceList on discovery and
@@ -263,14 +263,14 @@ public class WDCCList_Fragment extends ListFragment implements
 
 		} 
 		switch (operation) {
-		case serviceOperation.ADD_SERVICE:
+		case ServiceListOperation.ADD_SERVICE:
 			mPeerListAdapter.add(service);
 			break;
-		case serviceOperation.UPDATE_SERIVICE:
+		case ServiceListOperation.UPDATE_SERIVICE:
 			mServiceDeviceList.clear();
 			mServiceDeviceList.addAll(mManager.getServiceList());
 			break;
-		case serviceOperation.REMOVE_SERIVICE:
+		case ServiceListOperation.REMOVE_SERIVICE:
 			mPeerListAdapter.remove(service);
 			break;
 		default:
@@ -283,7 +283,7 @@ public class WDCCList_Fragment extends ListFragment implements
 			return;
 
 		} else {
-			if (operation== serviceOperation.ADD_SERVICE)
+			if (operation== ServiceListOperation.ADD_SERVICE)
 				mPeerListAdapter.add(service);
 			else
 				mPeerListAdapter.remove(service);

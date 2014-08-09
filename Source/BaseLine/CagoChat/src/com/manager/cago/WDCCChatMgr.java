@@ -23,34 +23,35 @@ public class WDCCChatMgr implements Runnable {
 	protected static final String TAG = WDCCChatMgr.class.getSimpleName();
 	private Socket socket = null;
 	private Handler handler = null;
-	private InputStream iStream;
-	private OutputStream oStream;
-	private WDCCP2PManager mManager;
+	private InputStream iStream = null;
+	private OutputStream oStream = null;
+	private WDCCP2PManager mManager = null;
 
-	private SessionListenerImp mSessionListener = new SessionListenerImp(){
+	private SessionListenerImp mSessionListener = new SessionListenerImp() {
 		public void onChatFinish() {
-			Log.d(TAG,"onChatFinish");
+			Log.d(TAG, "onChatFinish");
 			setHandler(null);
 		};
 	};
+
 	/**
 	 * @return the socket
 	 */
 	private Socket getSocket() {
 		synchronized (socket) {
-		return socket;
+			return socket;
 		}
 	}
 
 	/**
-	 * @param socket the socket to set
+	 * @param socket
+	 *            the socket to set
 	 */
 	private void setSocket(Socket socket) {
 		synchronized (socket) {
 			this.socket = socket;
 		}
 	}
-
 
 	/**
 	 * @param socket
@@ -59,9 +60,11 @@ public class WDCCChatMgr implements Runnable {
 	public WDCCChatMgr(Socket socket) {
 		setSocket(socket);
 		mManager = WDCCP2PManager.getWDCCP2PManager();
-		mManager.stopConnectionInfoListener();	//After starting chat I am not interested in the connectioninfo.
+		mManager.deregisterConnectionInfoListener(); // After starting chat I am
+														// not interested in the
+														// connectioninfo.
 		mManager.registerSessionListener(mSessionListener);
-		}
+	}
 
 	/*
 	 * public interface MessageTarget { public Handler getHandler(); }
@@ -74,9 +77,8 @@ public class WDCCChatMgr implements Runnable {
 	public void setHandler(Handler handler) {
 		synchronized (handler) {
 			this.handler = handler;
-	}
-		
-	
+		}
+
 	}
 
 	public Handler getHandler() {
@@ -93,7 +95,7 @@ public class WDCCChatMgr implements Runnable {
 			oStream = getSocket().getOutputStream();
 			byte[] buffer = new byte[1024];
 			int bytes;
-			while (getSocket().isConnected()/*true*/) {
+			while (getSocket().isConnected()/* true */) {
 				try {
 					Log.d(TAG, "isConnected is true");
 					bytes = iStream.read(buffer);
@@ -105,8 +107,9 @@ public class WDCCChatMgr implements Runnable {
 					Log.d(TAG, "Rec:" + String.valueOf(buffer));
 					Log.d(TAG, "data -----" + buffer.toString());
 					if (getHandler() != null) {
-						getHandler().obtainMessage(ChatActivity_Test.MESSAGE_READ,
-								bytes, -1, buffer).sendToTarget();
+						getHandler().obtainMessage(
+								ChatActivity_Test.MESSAGE_READ, bytes, -1,
+								buffer).sendToTarget();
 					}
 
 				} catch (IOException e) {

@@ -16,7 +16,7 @@ public class WDCCP2PService {
 	public String instanceName = null;
 	public String serviceRegistrationType = null;
 
-	public static class serviceOperation {
+	public static class ServiceListOperation {
 		public static final int ADD_SERVICE = 0;
 		public static final int REMOVE_SERIVICE = 1;
 		public static final int UPDATE_SERIVICE = 2;

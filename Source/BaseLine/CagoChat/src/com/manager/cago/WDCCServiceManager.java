@@ -6,7 +6,7 @@ package com.manager.cago;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.manager.cago.WDCCP2PService.serviceOperation;
+import com.manager.cago.WDCCP2PService.ServiceListOperation;
 
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
@@ -131,7 +131,7 @@ public class WDCCServiceManager {
 									+ instanceName);
 							Log.d(TAG, "onDnsSdServiceAvailable---1");
 
-							mManager.notifyServicesChanged(service, serviceOperation.ADD_SERVICE);
+							mManager.notifyServicesChanged(service, ServiceListOperation.ADD_SERVICE);
 
 							Log.d(TAG, "onDnsSdServiceAvailable --2");
 
@@ -196,6 +196,11 @@ public class WDCCServiceManager {
 	boolean stopServiceDiscovery() {
 		Log.d(TAG, "stopServiceDiscovery");
 		//mAndroidP2Pmanager.clearServiceRequests(mChannel, new ActionListener() {
+		/*if(!isDiscoveryActive()){
+			Log.d(TAG, "Discovery not active");
+			return false;
+
+		}*/
 		mAndroidP2Pmanager.removeServiceRequest(mChannel, mServiceRequest,new ActionListener() {
 
 			@Override

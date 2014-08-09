@@ -21,7 +21,7 @@ public class WDCCChatActivity extends ActionBarActivity implements
 	public static final int MY_HANDLE = 0x400 + 2;
 	protected static final String TAG = WDCCChatActivity.class.getSimpleName();
 	private WiFiChatFragment chatFragment;
-	private Handler m_Msg_handler = new Handler(this);
+	private Handler m_Msg_Handler = new Handler(this);
 	private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
 
 	/**
@@ -32,7 +32,7 @@ public class WDCCChatActivity extends ActionBarActivity implements
 	}
 
 	public Handler getChatMsgHandler() {
-		return m_Msg_handler;
+		return m_Msg_Handler;
 	}
 
 	public void setChatMsgHandler() {

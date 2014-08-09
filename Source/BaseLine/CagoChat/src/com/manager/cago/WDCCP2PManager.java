@@ -23,7 +23,7 @@ import android.net.wifi.p2p.WifiP2pManager.Channel;
 import android.os.Handler;
 import android.util.Log;
 
-import com.manager.cago.WDCCP2PService.serviceOperation;
+import com.manager.cago.WDCCP2PService.ServiceListOperation;
 import com.manager.cago.listeners.SessionListenerImp;
 import com.manager.cago.listeners.SessionListeners;
 import com.viewer.cagochat.ChatActivity_Test;
@@ -251,7 +251,7 @@ public class WDCCP2PManager {
 				element = service;
 
 				// updateDevInfoInList(element, service);
-				opt = serviceOperation.UPDATE_SERIVICE;
+				opt = ServiceListOperation.UPDATE_SERIVICE;
 
 			}
 			if (mDevListListener == null) {
@@ -264,10 +264,10 @@ public class WDCCP2PManager {
 
 			}
 		}
-		if (operation == serviceOperation.ADD_SERVICE) {
+		if (operation == ServiceListOperation.ADD_SERVICE) {
 			Log.d(TAG, "notifyServicesChanged adding service to list");
 			mServiceList.add(service);
-			opt = serviceOperation.ADD_SERVICE;
+			opt = ServiceListOperation.ADD_SERVICE;
 		}
 		if (mDevListListener == null) {
 			Log.d(TAG, "mDevListListener == null");
@@ -288,7 +288,7 @@ public class WDCCP2PManager {
 	private void updateDevInfoInList(WDCCP2PService element,
 			WDCCP2PService service) {
 		element.device = service.device;
-		notifyServicesChanged(null, serviceOperation.UPDATE_SERIVICE);
+		notifyServicesChanged(null, ServiceListOperation.UPDATE_SERIVICE);
 
 	}
 
@@ -356,7 +356,7 @@ public class WDCCP2PManager {
 	public void closeDownChat(boolean restart) {
 		Log.d(TAG, "calling removeAndStopServiceDisc");
 		removeAndStopServiceDisc();
-		stopConnectionInfoListener();
+		deregisterConnectionInfoListener();
 		removeGroup();
 		if(restart)
 			setupP2P();
@@ -364,9 +364,8 @@ public class WDCCP2PManager {
 			Log.d(TAG, "session end and with no restart");
 	}
 
-	public void stopConnectionInfoListener() {
+	public void deregisterConnectionInfoListener() {
 		mAndroidP2Pmanager.requestConnectionInfo(mChannel, null);
-
 	}
 
 	private void notifyRemoveGroupStatus(boolean success) {

@@ -30,7 +30,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 	public static final int MY_HANDLE = 0x400 + 2;
 	protected static final String TAG = ChatActivity_Test.class.getSimpleName();
 	private WiFiChatFragment chatFragment;
-	private Handler m_Msg_handler = new Handler(this);
+	private Handler m_Msg_Handler = new Handler(this);
 	private WDCCP2PManager mManager = WDCCP2PManager.getWDCCP2PManager();
 
 	@Override
@@ -41,7 +41,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		if (savedInstanceState == null) {
 			getFragmentManager()
 					.beginTransaction()
-					.add(R.id.container, chatFragment /* new WiFiChatFragment() */)
+					.add(R.id.container, chatFragment)
 					.commit();
 		}
 		//Adds images to the action bar
@@ -53,7 +53,7 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		View v = inflator.inflate(R.layout.actionbarlayout, null);
 
 		actionBar.setCustomView(v);
-		mManager.setChatMsgHandler(m_Msg_handler);
+		mManager.setChatMsgHandler(m_Msg_Handler);
 	}
 
 	@Override
@@ -75,26 +75,8 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		return super.onOptionsItemSelected(item);
 	}
 
-/*	*//**
-	 * A placeholder fragment containing a simple view.
-	 *//*
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_chat_test,
-					container, false);
-
-			return rootView;
-		}
-	}
-*/
 	public Handler getChatMsgHandler() {
-		return m_Msg_handler;
+		return m_Msg_Handler;
 	}
 
 	public void setChatMsgHandler() {
@@ -136,14 +118,16 @@ public class ChatActivity_Test extends ActionBarActivity implements
 		/*	Intent intent = new Intent(this, WDCCScanningActivity.class);
 			startActivity(intent);*/
 		} else if (keyCode == KeyEvent.KEYCODE_HOME) {
-			this.finish();
-			mManager.closeDownChat(false);
+			/*this.finish();
+			mManager.closeDownChat(false);*/
 		} 
 		return super.onKeyUp(keyCode, event);
 	}
+
 	@Override
-protected void onDestroy() {
-		//mManager.closeDownChat(false);
+	protected void onDestroy() {
+		Log.d(TAG, "onDestroy");
+		// mManager.closeDownChat(false);
 		super.onDestroy();
-}
+	}
 }

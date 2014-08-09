@@ -47,7 +47,12 @@ public class WiFiChatFragment extends Fragment {
 			@Override
 			public void onRemoveGroupSuccess() {
 				Log.d(TAG, "onRemoveGroupSuccess");
-				getActivity().finish();
+				if(getActivity()!=null){
+					getActivity().finish();
+				} else {
+					Log.d(TAG, "getActivity returned null");
+				}
+				
 				super.onRemoveGroupSuccess();
 			}
 
@@ -57,7 +62,11 @@ public class WiFiChatFragment extends Fragment {
 			@Override
 			public void onRemoveGroupFail() {
 				Log.d(TAG, "onRemoveGroupFail");
-				getActivity().finish();
+				if(getActivity()!=null){
+					getActivity().finish();
+				} else {
+					Log.d(TAG, "getActivity returned null");
+				}
 				super.onRemoveGroupFail();
 			}
 			
