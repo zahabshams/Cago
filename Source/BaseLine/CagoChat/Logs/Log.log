@@ -1,0 +1,141 @@
+D/WifiP2pService( 1061): GroupCreatedState{ when=0 what=196613 arg1=1 obj={InterfaceName: p2p0 LinkAddresses: [192.168.49.223/24,]  Routes: [192.168.49.0/24 -> 0.0.0.0,0.0.0.0/0 -> 192.168.49.1,] DnsAddresses: [192.168.49.1,] Domains: MTU: 0} DHCP server /192.168.49.1 Vendor info ANDROID_METERED lease 3600 seconds target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): DhcpResults: {InterfaceName: p2p0 LinkAddresses: [192.168.49.223/24,]  Routes: [192.168.49.0/24 -> 0.0.0.0,0.0.0.0/0 -> 192.168.49.1,] DnsAddresses: [192.168.49.1,] Domains: MTU: 0} DHCP server /192.168.49.1 Vendor info ANDROID_METERED lease 3600 seconds
+D/WDCCBroadcastReceiver(24210): onReceiveandroid.net.wifi.p2p.THIS_DEVICE_CHANGED
+D/WDCCBroadcastReceiver(24210): WIFI_P2P_THIS_DEVICE_CHANGED_ACTION
+D/WDCCBroadcastReceiver(24210): Device status -0
+D/WDCCBroadcastReceiver(24210): onReceiveandroid.net.wifi.p2p.PEERS_CHANGED
+D/WDCCBroadcastReceiver(24210): WIFI_P2P_PEERS_CHANGED_ACTION
+D/WifiP2pService( 1061): sending p2p connection changed broadcast
+D/WDCCBroadcastReceiver(24210): onReceiveandroid.net.wifi.p2p.CONNECTION_STATE_CHANGE
+D/WDCCBroadcastReceiver(24210): WIFI_P2P_CONNECTION_CHANGED_ACTION
+D/WDCCBroadcastReceiver(24210): networkInfo.isConnected()true
+D/WDCCBroadcastReceiver(24210): networkInfo.isConnected()-----------------1
+D/WifiStateMachine( 1061): handleMessage: E msg.what=143371
+D/WifiStateMachine( 1061): processMsg: DisconnectedState
+D/WifiStateMachine( 1061): processMsg: ConnectModeState
+D/WifiStateMachine( 1061): processMsg: DriverStartedState
+D/WifiStateMachine( 1061): processMsg: SupplicantStartedState
+D/WifiStateMachine( 1061): processMsg: DefaultState
+D/WifiStateMachine( 1061): handleMessage: X
+D/WifiP2pService( 1061): GroupCreatedState{ when=-15ms what=139283 arg2=7 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): P2pEnabledState{ when=-16ms what=139283 arg2=7 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): DefaultState{ when=-16ms what=139283 arg2=7 target=com.android.internal.util.StateMachine$SmHandler }
+D/WDCCPeerlistener(24210): ----------onPeersAvailable--------------5
+D/WDCCPeerlistener(24210): peers.size() = 1
+D/WDCCPeerlistener(24210): Device name Android_ee1cDevice Address 02:22:f4:c1:87:f7
+D/WifiP2pService( 1061): GroupCreatedState{ when=-14ms what=139285 arg2=8 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): P2pEnabledState{ when=-14ms what=139285 arg2=8 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): DefaultState{ when=-15ms what=139285 arg2=8 target=com.android.internal.util.StateMachine$SmHandler }
+D/WDCCConnectionMgr(24210): onConnectionInfoAvailable
+D/WDCCConnectionMgr(24210): Connected as peer
+D/WDCCClientSocketMgr(24210): WDCCClientSocketMgr
+D/WDCCP2PManager(24210): IN getWDCCP2PManager
+D/WDCCP2PManager(24210): Test=com.manager.cago.WDCCP2PManager@41fa0c18
+I/WDCCP2PManager(24210): registerSessionListener()
+D/WDCCP2PManager(24210): Session Listener registered
+D/WDCCClientSocketMgr(24210): Launching the I/O handler
+D/WDCCP2PManager(24210): IN getWDCCP2PManager
+D/WDCCP2PManager(24210): Test=com.manager.cago.WDCCP2PManager@41fa0c18
+D/WifiP2pService( 1061): GroupCreatedState{ when=0 what=139285 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): P2pEnabledState{ when=-1ms what=139285 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiP2pService( 1061): DefaultState{ when=-1ms what=139285 target=com.android.internal.util.StateMachine$SmHandler }
+I/WDCCP2PManager(24210): registerSessionListener()
+D/WDCCP2PManager(24210): Session Listener registered
+I/ActivityManager( 1061): START u0 {flg=0x10000000 cmp=com.viewer.cagochat/.ChatActivity_Test} from pid 24210
+I/LaunchCheckinHandler( 1061): cleanup(): cleared. Last call was 10346 ms ago
+D/WDCCList_Fragment(24210): onPause
+W/ContextImpl( 1647): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1252 android.content.ContextWrapper.sendBroadcast:365 com.motorola.motocare.util.TriggerHelper$TriggerBuilder.send:76 com.motorola.motocare.internal.frameworkevents.PauseResumeTrigger.handleFrameworkEvent:53 com.motorola.motocare.internal.frameworkevents.FwEventMonitor$FrameworkListener.processFrameworkEvent:114 
+D/WDCCP2PManager(24210): IN deregisterBroadCastReceiver
+W/ContextImpl( 1647): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1252 android.content.ContextWrapper.sendBroadcast:365 com.motorola.motocare.util.TriggerHelper$TriggerBuilder.send:76 com.motorola.motocare.internal.frameworkevents.PauseResumeTrigger.handleFrameworkEvent:53 com.motorola.motocare.internal.frameworkevents.FwEventMonitor$FrameworkListener.processFrameworkEvent:114 
+D/WDCCP2PManager(24210): IN getWDCCP2PManager
+D/WDCCP2PManager(24210): Test=com.manager.cago.WDCCP2PManager@41fa0c18
+D/WDCCChatMgr(24210): isConnected is true
+D/WDCCP2PManager(24210): IN getWDCCP2PManager
+D/WDCCP2PManager(24210): Test=com.manager.cago.WDCCP2PManager@41fa0c18
+D/WDCCChatFragment(24210): onCreateView
+D/WDCCChatFragment(24210): onCreateView calling stopServiceDiscovery
+D/WDCCServiceManager(24210): stopServiceDiscovery
+D/AndroidRuntime(24210): Shutting down VM
+W/dalvikvm(24210): threadid=1: thread exiting with uncaught exception (group=0x416c9d40)
+E/AndroidRuntime(24210): FATAL EXCEPTION: main
+E/AndroidRuntime(24210): Process: com.viewer.cagochat, PID: 24210
+E/AndroidRuntime(24210): java.lang.RuntimeException: Unable to start activity ComponentInfo{com.viewer.cagochat/com.viewer.cagochat.ChatActivity_Test}: java.lang.IllegalArgumentException: service request is null
+E/AndroidRuntime(24210): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2198)
+E/AndroidRuntime(24210): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2257)
+E/AndroidRuntime(24210): 	at android.app.ActivityThread.access$800(ActivityThread.java:139)
+E/AndroidRuntime(24210): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1210)
+E/AndroidRuntime(24210): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+E/AndroidRuntime(24210): 	at android.os.Looper.loop(Looper.java:136)
+E/AndroidRuntime(24210): 	at android.app.ActivityThread.main(ActivityThread.java:5086)
+E/AndroidRuntime(24210): 	at java.lang.reflect.Method.invokeNative(Native Method)
+E/AndroidRuntime(24210): 	at java.lang.reflect.Method.invoke(Method.java:515)
+E/AndroidRuntime(24210): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:785)
+E/AndroidRuntime(24210): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:601)
+E/AndroidRuntime(24210): 	at dalvik.system.NativeStart.main(Native Method)
+E/AndroidRuntime(24210): Caused by: java.lang.IllegalArgumentException: service request is null
+E/AndroidRuntime(24210): 	at android.net.wifi.p2p.WifiP2pManager.checkServiceRequest(WifiP2pManager.java:908)
+E/AndroidRuntime(24210): 	at android.net.wifi.p2p.WifiP2pManager.removeServiceRequest(WifiP2pManager.java:1284)
+E/AndroidRuntime(24210): 	at com.manager.cago.WDCCServiceManager.stopServiceDiscovery(WDCCServiceManager.java:204)
+E/AndroidRuntime(24210): 	at com.manager.cago.WDCCP2PManager.stopServiceDiscovery(WDCCP2PManager.java:404)
+E/AndroidRuntime(24210): 	at com.viewer.cagochat.WiFiChatFragment.onCreateView(WiFiChatFragment.java:109)
+E/AndroidRuntime(24210): 	at android.app.Fragment.performCreateView(Fragment.java:1700)
+E/AndroidRuntime(24210): 	at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:890)
+E/AndroidRuntime(24210): 	at android.app.FragmentManagerImpl.moveToState(FragmentManager.java:1062)
+E/AndroidRuntime(24210): 	at android.app.BackStackRecord.run(BackStackRecord.java:684)
+E/AndroidRuntime(24210): 	at android.app.FragmentManagerImpl.execPendingActions(FragmentManager.java:1447)
+E/AndroidRuntime(24210): 	at android.app.Activity.performStart(Activity.java:5257)
+E/AndroidRuntime(24210): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2171)
+E/AndroidRuntime(24210): 	... 11 more
+W/ActivityManager( 1061):   Force finishing activity com.viewer.cagochat/.ChatActivity_Test
+W/ContextImpl( 1647): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1252 android.content.ContextWrapper.sendBroadcast:365 com.motorola.motocare.util.TriggerHelper$TriggerBuilder.send:76 com.motorola.motocare.internal.frameworkevents.PauseResumeTrigger.handleFrameworkEvent:53 com.motorola.motocare.internal.frameworkevents.FwEventMonitor$FrameworkListener.processFrameworkEvent:114 
+W/ActivityManager( 1061):   Force finishing activity com.viewer.cagochat/.WDCCDevice_ListActivity
+W/ActivityManager( 1061): Activity pause timeout for ActivityRecord{435d8738 u0 com.viewer.cagochat/.ChatActivity_Test t593 f}
+W/ContextImpl( 1647): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1252 android.content.ContextWrapper.sendBroadcast:365 com.motorola.motocare.util.TriggerHelper$TriggerBuilder.send:76 com.motorola.motocare.internal.frameworkevents.PauseResumeTrigger.handleFrameworkEvent:53 com.motorola.motocare.internal.frameworkevents.FwEventMonitor$FrameworkListener.processFrameworkEvent:114 
+D/hardware_info(  265): hw_info_append_hw_type : device_name = speaker
+I/SFPerfTracer(  261):      triggers: (rate: 1335:36287) (compose: 0:46) (post: 0:3) (render: 71:3972) (13:188146 frames) (14:572829)
+D/SFPerfTracer(  261):        layers: (5:12) (DimLayer: 0:503)* (DimLayer: 0:10)* (FocusedStackFrame: 0:6445)* (StatusBar: 0:36305) (NavigationBar: 0:53520) (com.android.wallpaper.nexus.NexusWallpaper: 0:129681)* (DimLayer: 14:68) (DimLayer: 0:6)* (com.viewer.cagochat/com.viewer.cagochat.WDCCScanningActivity: 0:25)* (com.viewer.cagochat/com.viewer.cagochat.WDCCDevice_ListActivity: 0:37) (: 0:45)* (Application Error: com.viewer.cagochat: 12:17) 
+V/AlarmManager( 1061): sending alarm Alarm{42f0b668 type 2 com.google.android.gms}
+D/Sensors ( 1061): AccelerationSensor: set delay 20
+I/SFPerfTracer(  261):      triggers: (rate: 380:81140) (70657 sw vsyncs) (255873 skipped) (131:634749 vsyncs) (133:759742)
+I/ActivityManager( 1061): Killing 24341:com.google.android.partnersetup/u0a23 (adj 15): empty #9
+W/ContextImpl( 1647): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1252 android.content.ContextWrapper.sendBroadcast:365 com.motorola.motocare.util.TriggerHelper$TriggerBuilder.send:76 com.motorola.motocare.internal.frameworkevents.ProcessKillTrigger.sendTrigger:147 com.motorola.motocare.internal.frameworkevents.ProcessKillTrigger.handleFrameworkEvent:164 
+V/AlarmManager( 1061): sending alarm Alarm{431ef458 type 1 tm.app.worldClock}
+D/SBar.MSimNetwCntrl( 1128): updateTelephonySignalStrength[0]: iconList[iconLevel]=7f020299/zz_moto_stat_sys_signal_4_fully_wide iconLevel=4 mMSimMobileInetCondition=0 mMSimMobileInetConditionSB=1
+D/SBar.MSimNetwCntrl( 1128): updateDataIcon[0]: subscription=0
+D/SBar.MSimNetwCntrl( 1128): updateDataIcon[0]: dataSub=0
+D/SBar.MSimNetwCntrl( 1128): updateDataIcon[0]: SimState=READY
+I/SBar.MSimNetwCntrl( 1128): notifySignalsChangedCallbacks[0]: isEmergencyOnly(0)=false enabled=true sim=(none)="(empty)" signal=zz_moto_stat_sys_signal_4_wide="Phone signal full." roaming=(none)="Not roaming."
+I/SBar.MSimNetwCntrl( 1128):  type=zz_moto_stat_sys_data_h_null_wide="No data." activity=(none)="(empty)"
+I/SBar.MSimNetwCntrl( 1128):  slot=1="1" network="Vodafone IN|airtel"
+I/SFPerfTracer(  261):      triggers: (rate: 380:81140) (70657 sw vsyncs) (255873 skipped) (148:634897 vsyncs) (150:759892)
+D/Sensors ( 1061): AccelerationSensor: set delay 200
+V/AlarmManager( 1061): sending alarm Alarm{433f52d8 type 0 android}
+D/WifiStateMachine( 1061): handleMessage: E msg.what=131143
+D/WifiStateMachine( 1061): processMsg: DisconnectedState
+D/WifiStateMachine( 1061): processMsg: ConnectModeState
+D/WifiStateMachine( 1061): processMsg: DriverStartedState
+D/WifiStateMachine( 1061): handleMessage: X
+V/AlarmManager( 1061): sending alarm Alarm{433f5200 type 1 tm.app.worldClock}
+D/Ulp_jni ( 1061): Location CB invoked
+W/ActivityManager( 1061): Launch timeout has expired, giving up wake lock!
+V/AlarmManager( 1061): sending alarm Alarm{430c3490 type 2 com.google.android.gms}
+D/dalvikvm( 1061): GC_EXPLICIT freed 2622K, 20% free 30586K/38120K, paused 5ms+21ms, total 157ms
+D/Sensors ( 1061): AccelerationSensor: set delay 20
+D/MDMCTBK (  436): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-BSS-ADDED 4 0
+D/MDMCTBK (  436): Event received = CTRL-EVENT-BSS-ADDED 4 0
+D/MDMCTBK (  436): reply_len: 40 reply is = IFNAME=wlan0 <3>CTRL-EVENT-SCAN-RESULTS 
+D/MDMCTBK (  436): Event received = CTRL-EVENT-SCAN-RESULTS 
+D/MDMCTBK (  436): reply_len: 40 reply is = IFNAME=wlan0 <3>WPS-AP-AVAILABLE 
+D/MDMCTBK (  436): Event received = WPS-AP-AVAILABLE 
+D/MDMCTBK (  436): reply_len: 40 reply is = IFNAME=p2p0 <3>CTRL-EVENT-SCAN-RESULTS 
+D/MDMCTBK (  436): Event received = CTRL-EVENT-SCAN-RESULTS 
+D/TCMD    (  529): NL - Read 56 bytes from update socket.
+D/TCMD    (  529): NL - message type is RTM_NEWLINK
+D/TCMD    (  529): Listening for incoming client connection request
+D/WifiStateMachine( 1061): handleMessage: E msg.what=147461
+D/WifiP2pService( 1061): GroupCreatedState{ when=0 what=147461 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiStateMachine( 1061): processMsg: DisconnectedState
+D/WifiStateMachine( 1061): processMsg: ConnectModeState
+D/WifiP2pService( 1061): P2pEnabledState{ when=-2ms what=147461 target=com.android.internal.util.StateMachine$SmHandler }
+D/WifiStateMachine( 1061): processMsg: DriverStartedState
+D/WifiP2pService( 1061): DefaultState{ when=-2ms what=147461 target=com.android.internal.util.StateMachine$SmHandler }
